@@ -12,6 +12,7 @@ namespace Cognitive_Azure
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(x => x.AddServerHeader = false)
                 .UseStartup<Startup>()
                 .Build();
     }
