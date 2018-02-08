@@ -5,35 +5,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Bare - Start Bootstrap Template</title>
+        <title>@ViewData["Title"]</title>
         
         <environment include="Development">
             <link href="/css/bootstrap.min.css" rel="stylesheet" />
-            @*<link href="/css/site.css" rel="stylesheet" />*@
+            <link href="/css/site.css" rel="stylesheet" />
         </environment>
         <environment exclude="Development">
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-            @*<link href="/css/site.min.css" rel="stylesheet" />*@
-        
-            </environment>
-
-        <link href="/css/site.min.css" rel="stylesheet" />
+            <link href="/css/site.min.css" rel="stylesheet" />
+        </environment>
     </head>
     <body>
-        <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
+                <a class="navbar-brand" asp-action="Index" asp-controller="Home">Cognitive Azure</a>
+                <div>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">
-                                Home
-                                <span class="sr-only">(current)</span>
-                            </a>
+                            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span> </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">About</a>
@@ -48,9 +38,22 @@
                 </div>
             </div>
         </nav>
-        <div class="container"> 
-            @RenderBody()
+    <div class="container main-container"> 
+        @RenderBody()
+    </div>
+    
+    <footer class="bd-footer text-muted">
+        <div class="container-fluid p-1 p-md-1 text-align-center">
+            <ul class="bd-footer-links">
+                <li><a href="//twitter.com/paulbreen" target="_blank">Twitter</a></li>
+                <li><a href="#" target="_blank">Contact</a></li>
+                <li><a href="#" target="_blank">About</a></li>
+            </ul>
         </div>
+        <div class="container-fluid p-1 p-md-1 text-align-center">
+            <a href="//pbreen.co.uk" target="_blank">Paul Breen </a> &copy; @DateTime.UtcNow.Year
+        </div>
+    </footer>
     <environment include="Development">
         <script src="lib/jquery/dist/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
