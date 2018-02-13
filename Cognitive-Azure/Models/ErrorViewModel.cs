@@ -1,4 +1,3 @@
-using System;
 
 namespace Cognitive_Azure.Models
 {

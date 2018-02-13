@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Cognitive_Azure.Models;
 
-namespace Cognitive_Azure.Controllers
+namespace Cognitive_Azure.Features.Home
 {
     public class HomeController : Controller
     {
