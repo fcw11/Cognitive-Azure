@@ -33,7 +33,7 @@ static async void MakeRequest(Stream myBlob, TraceWriter log)
     } 
 
     var answer = await response.Content.ReadAsStringAsync();
-
+    log.Info("Hello World");
     log.Info(answer);
 }
 
