@@ -1,0 +1,9 @@
+﻿@model Cognitive_Azure.Features.Images.Upload
+
+@Html.ValidationSummary()
+
+<form asp-controller="Images" asp-action="Upload" method="post" enctype="multipart/form-data">
+    @Html.EditorFor(x => x.Image)
+    
+    <input type="submit" value="Upload" />
+</form>

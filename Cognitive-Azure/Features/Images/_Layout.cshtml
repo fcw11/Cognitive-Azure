@@ -1,0 +1,20 @@
+﻿@{
+    Layout = @"/Features/Shared//_Layout.cshtml";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" href="#">View</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-action="Upload" asp-controller="Images">Upload</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+    </li>
+</ul>
+
+@RenderBody()
