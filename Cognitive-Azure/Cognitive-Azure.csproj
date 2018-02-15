@@ -2,11 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>Cognitive_Azure</RootNamespace>
+    <AssemblyName>Cognitive_Azure</AssemblyName>
+    <UserSecretsId>1f0ce2da-4052-4b49-b4a7-2e192014fcc5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.6.362" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.7.0" />
     <PackageReference Include="OdeToCode.AddFeatureFolders" Version="1.0.8" />
   </ItemGroup>
