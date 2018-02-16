@@ -1,18 +1,17 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Services.Interfaces;
 
 namespace Cognitive_Azure.Features.Images
 {
     public class ImagesController : Controller
     {
-        public IConfiguration Configuration { get; set; }
+        public ICloudStorageService CloudStorageService { get; set; }
 
-        public ImagesController(IConfiguration configuration)
+        public ImagesController(ICloudStorageService cloudStorageService)
         {
-            Configuration = configuration;
+            CloudStorageService = cloudStorageService;
         }
 
         public IActionResult Index()
@@ -31,18 +30,7 @@ namespace Cognitive_Azure.Features.Images
         {
             if (ModelState.IsValid)
             {
-                var accountName = Configuration["BlobAccountName"];
-                var key = Configuration["BlobStorageAPIKey"];
-                var containerName = Configuration["ImageContainerName"];
-
-                var storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(accountName, key),true);
-                var blobClient = storageAccount.CreateCloudBlobClient();
-                var container = blobClient.GetContainerReference(containerName);
-                var blockBlob = container.GetBlockBlobReference(Guid.NewGuid().ToString());
-                using (var stream = model.Image.OpenReadStream())
-                {
-                    blockBlob.UploadFromStreamAsync(stream).Wait();
-                }
+               CloudStorageService.UploadImage(model.Image);
             }
 
             return View(model);
