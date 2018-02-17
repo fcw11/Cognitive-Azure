@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
 namespace Cognitive_Azure.Features.Images

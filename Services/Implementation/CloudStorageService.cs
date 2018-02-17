@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Table;
+using Services.Entities;
 using Services.Interfaces;
 
 namespace Services.Implementation
@@ -14,6 +17,8 @@ namespace Services.Implementation
         private readonly string _accountName;
         private readonly string _key;
         private readonly string _containerName;
+        private CloudStorageAccount _cloudStorageAccount;
+
 
         public CloudStorageService(IConfiguration configuration)
         {
@@ -24,17 +29,41 @@ namespace Services.Implementation
             _containerName = Configuration["ImageContainerName"];
         }
 
-        public void UploadImage(IFormFile file)
+        public async void UploadImage(IFormFile file)
         {
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(_accountName, _key), true);
-            var blobClient     = storageAccount.CreateCloudBlobClient();
-            var container      = blobClient.GetContainerReference(_containerName);
-            var blockBlob      = container.GetBlockBlobReference(Guid.NewGuid().ToString());
+            _cloudStorageAccount = new CloudStorageAccount(new StorageCredentials(_accountName, _key), true);
 
-            using (var stream = file.OpenReadStream())
-            {
-                blockBlob.UploadFromStreamAsync(stream).Wait();
-            }
+            var imageName = Guid.NewGuid();
+
+            await UploadImageToBlob(file, imageName);
+        }
+
+        private async Task UploadImageToBlob(IFormFile file, Guid imageName)
+        {
+            var blobClient     = _cloudStorageAccount.CreateCloudBlobClient();
+            var blobContainer  = blobClient.GetContainerReference(_containerName);
+            var blockBlob      = blobContainer.GetBlockBlobReference(imageName.ToString());
+
+            var stream = file.OpenReadStream();
+
+            blockBlob.UploadFromStreamAsync(stream).Wait();
+
+            await UploadImageInfomationToTable(file, imageName, blockBlob.Uri);
+        }
+
+        private async Task UploadImageInfomationToTable(IFormFile file, Guid imageId, Uri blobUri)
+        {
+            var tableClient = _cloudStorageAccount.CreateCloudTableClient();
+
+            var table = tableClient.GetTableReference("images");
+
+            await table.CreateIfNotExistsAsync();
+
+            var entity = new Image(file.FileName, imageId) { Uri = blobUri.AbsoluteUri };
+
+            var insertOperation = TableOperation.Insert(entity);
+
+            await table.ExecuteAsync(insertOperation);
         }
     }
 }
