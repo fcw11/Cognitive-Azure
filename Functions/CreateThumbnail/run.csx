@@ -7,10 +7,12 @@ using System;
 using System.Text;
 
 public static void Run(Stream input, Stream output, string name, TraceWriter log)
-{  
+{
+    log.Info("Start");
+
     string cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
-    var client = new HttpClient(); 
+    var client = new HttpClient();
 
     client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
 
@@ -21,14 +23,16 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
         var uri = "https://northeurope.api.cognitive.microsoft.com/vision/v1.0/generateThumbnail?" + requestParameters;
 
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
-        
-        var response = await client.PostAsync(uri, content);
 
-        var responseBytes = await response.Content.ReadAsByteArrayAsync();
+        var response = client.PostAsync(uri, content).Result;
+
+        var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
 
         if (response.IsSuccessStatusCode)
         {
             output.Write(responseBytes, 0, responseBytes.Length);
         }
     }
-} 
+
+    log.Info("Finish");
+}
