@@ -8,8 +8,7 @@ using System.Text;
 
 public static void Run(Stream myBlob, string name, TraceWriter log)
 {
-        log.Info($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
-        MakeRequest(myBlob, log);
+    MakeRequest(myBlob, log);
 }
 
 static async void MakeRequest(Stream myBlob, TraceWriter log)
@@ -18,22 +17,18 @@ static async void MakeRequest(Stream myBlob, TraceWriter log)
 
     var client = new HttpClient();
 
-    // Request headers
     client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
-
-    // Request parameters
-    HttpResponseMessage response;
 
     using (HttpContent content = new StreamContent(myBlob))
     {
         var uri = "https://northeurope.api.cognitive.microsoft.com/vision/v1.0/describe?maxCandidates=1";
 
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
-        response = client.PostAsync(uri, content).Result;
+
+        var response = await client.PostAsync(uri, content);
+
+        var answer = await response.Content.ReadAsStringAsync();
+
+        log.Info(answer);
     } 
-
-    var answer = await response.Content.ReadAsStringAsync();
-    log.Info("Hello World");
-    log.Info(answer);
 }
-

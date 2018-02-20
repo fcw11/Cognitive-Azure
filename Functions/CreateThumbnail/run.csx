@@ -14,8 +14,6 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
 
     client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
 
-    HttpResponseMessage response;
-
     using (HttpContent content = new StreamContent(input))
     {
         string requestParameters = "width=200&height=150&smartCropping=true";
@@ -24,21 +22,13 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
 
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
         
-        response = client.PostAsync(uri, content).Result;
-    } 
+        var response = await client.PostAsync(uri, content);
 
-    var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+        var responseBytes = await response.Content.ReadAsByteArrayAsync();
 
-    output.Write(responseBytes, 0, responseBytes.Length);
-   // if (response.IsSuccessStatusCode)
-   // {
-     //   log.Info("Succezz");
-       // output = "Success";
-  //      output = response.Content.ReadAsStreamAsync().Result;        
-  //  }
-  //  else
-  //  {
-   //     output = "Error";
-       // output = input;
-   // }
+        if (response.IsSuccessStatusCode)
+        {
+            output.Write(responseBytes, 0, responseBytes.Length);
+        }
+    }
 } 
