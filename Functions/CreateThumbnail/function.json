@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "input",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "images/{name}",
+      "connection": "cognitiveazure_STORAGE"
+    },
+    {
+      "type": "blob",
+      "name": "output",
+      "path": "thumbnails/{name}",
+      "connection": "cognitiveazure_STORAGE",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

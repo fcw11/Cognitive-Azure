@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 lib
 js
+/Cognitive-Azure/wwwroot/css/bootstrap*
