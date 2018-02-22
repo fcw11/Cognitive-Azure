@@ -13,6 +13,15 @@
       "path": "thumbnails/{name}",
       "connection": "cognitiveazure_STORAGE",
       "direction": "out"
+    },
+    {
+      "type": "table",
+      "name": "inputTable",
+      "tableName": "images",
+      "rowKey": "{name}",
+      "take": 1,
+      "connection": "cognitiveazure_STORAGE",
+      "direction": "in"
     }
   ],
   "disabled": false

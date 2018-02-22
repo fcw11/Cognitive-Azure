@@ -1,3 +1,5 @@
+#r "Microsoft.WindowsAzure.Storage"
+using Microsoft.WindowsAzure.Storage.Table;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -6,11 +8,11 @@ using System.Configuration;
 using System;
 using System.Text;
 
-public static void Run(Stream input, Stream output, string name, TraceWriter log)
+public static void Run(Stream input, Stream output, string name, TraceWriter log, CloudTable inputTable)
 {
     log.Info("Start");
 
-    string cogKey = ConfigurationManager.AppSettings["CognitiveService"];
+    var cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
     var client = new HttpClient();
 
@@ -18,9 +20,9 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
 
     using (HttpContent content = new StreamContent(input))
     {
-        string requestParameters = "width=200&height=150&smartCropping=true";
+        var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"];
 
-        var uri = "https://northeurope.api.cognitive.microsoft.com/vision/v1.0/generateThumbnail?" + requestParameters;
+        var uri = visionUri + "generateThumbnail?width=200&height=150&smartCropping=true";
 
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
@@ -34,5 +36,28 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
         }
     }
 
+    var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, name));
+
+    var tableQueryResult = inputTable.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
+
+    var image = tableQueryResult.Results.Single();
+
+    image.ThumbUri = "Hello World";
+
+    var updateOperation = TableOperation.Replace(image);
+
+    inputTable.Execute(updateOperation); ;
+
     log.Info("Finish");
+}
+
+public class Image : TableEntity
+{
+    public string Name { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string Uri { get; set; }
+
+    public string ThumbUri { get; set; }
 }

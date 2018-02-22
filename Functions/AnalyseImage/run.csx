@@ -23,7 +23,9 @@ static async void MakeRequest(Stream myBlob, TraceWriter log)
 
     using (HttpContent content = new StreamContent(myBlob))
     {
-        var uri = "https://northeurope.api.cognitive.microsoft.com/vision/v1.0/describe?maxCandidates=1";
+        var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"];
+
+        var uri = visionUri + "describe?maxCandidates=1";
 
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 

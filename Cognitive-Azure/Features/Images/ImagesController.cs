@@ -14,6 +14,8 @@ namespace Cognitive_Azure.Features.Images
 
         public IActionResult Index()
         {
+            var items = CloudStorageService.RetrieveImages();
+            
             return View();
         }
 

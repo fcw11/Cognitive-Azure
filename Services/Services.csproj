@@ -12,6 +12,9 @@
     <Reference Include="Microsoft.AspNetCore.Http.Features">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.http.features\2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Azure.WebJobs">
+      <HintPath>C:\Users\paulb\.nuget\packages\microsoft.azure.webjobs.core\2.1.0-beta1\lib\net45\Microsoft.Azure.WebJobs.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
       <HintPath>C:\Users\paulb\.nuget\packages\microsoft.extensions.configuration.abstractions\1.0.0\lib\netstandard1.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>

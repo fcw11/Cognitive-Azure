@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -27,12 +30,12 @@ namespace Services.Implementation
             _accountName   = Configuration["BlobAccountName"];
             _key           = Configuration["BlobStorageAPIKey"];
             _containerName = Configuration["ImageContainerName"];
+
+            _cloudStorageAccount = new CloudStorageAccount(new StorageCredentials(_accountName, _key), true);
         }
 
         public async void UploadImage(IFormFile file)
         {
-            _cloudStorageAccount = new CloudStorageAccount(new StorageCredentials(_accountName, _key), true);
-
             var imageName = Guid.NewGuid();
 
             await UploadImageToBlob(file, imageName);
@@ -64,6 +67,19 @@ namespace Services.Implementation
             var insertOperation = TableOperation.Insert(entity);
 
             await table.ExecuteAsync(insertOperation);
+        }
+
+        public IQueryable<Image> RetrieveImages()
+        {
+            var tableClient = _cloudStorageAccount.CreateCloudTableClient();
+
+            var table = tableClient.GetTableReference("images");
+
+            var tableQuery = new TableQuery<Image>();
+
+            var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
+
+            return tableQueryResult.Results.AsQueryable();
         }
     }
 }
