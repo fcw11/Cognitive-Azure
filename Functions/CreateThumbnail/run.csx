@@ -1,4 +1,6 @@
 #r "Microsoft.WindowsAzure.Storage"
+#load "..\Model\Image.csx"
+
 using Microsoft.WindowsAzure.Storage.Table;
 using System.IO;
 using System.Net.Http;
@@ -49,15 +51,4 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
     inputTable.Execute(updateOperation); ;
 
     log.Info("Finish");
-}
-
-public class Image : TableEntity
-{
-    public string Name { get; set; }
-
-    public DateTime CreatedDate { get; set; }
-
-    public string Uri { get; set; }
-
-    public string ThumbUri { get; set; }
 }
