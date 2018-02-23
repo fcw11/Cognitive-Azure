@@ -30,10 +30,7 @@ namespace Cognitive_Azure.Features.Images
         {
             if (ModelState.IsValid)
             {
-                for (int i = 0; i < 20; i++)
-                {
-                    CloudStorageService.UploadImage(model.Image);
-                }
+                CloudStorageService.UploadImage(model.Image);
             }
 
             return View(model);

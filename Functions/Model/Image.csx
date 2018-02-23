@@ -19,4 +19,6 @@ public class Image : TableEntity
     public string Uri { get; set; }
 
     public string ThumbUri { get; set; }
+
+    public string Description { get; set; }
 }

@@ -6,6 +6,15 @@
       "direction": "in",
       "path": "images/{name}",
       "connection": "cognitiveazure_STORAGE"
+    },
+    {
+      "type": "table",
+      "name": "inputTable",
+      "tableName": "images",
+      "rowKey": "{name}",
+      "take": 1,
+      "connection": "cognitiveazure_STORAGE",
+      "direction": "in"
     }
   ],
   "disabled": false

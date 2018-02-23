@@ -1,7 +1,6 @@
 #r "Microsoft.WindowsAzure.Storage"
 #load "..\Model\Image.csx"
 
-using Microsoft.WindowsAzure.Storage.Table;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,6 +8,7 @@ using System.Web;
 using System.Configuration;
 using System;
 using System.Text;
+using Microsoft.WindowsAzure.Storage.Table;
 
 public static void Run(Stream input, Stream output, string name, TraceWriter log, CloudTable inputTable)
 {
