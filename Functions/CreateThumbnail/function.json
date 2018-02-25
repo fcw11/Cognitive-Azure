@@ -12,7 +12,7 @@
       "name": "output",
       "path": "thumbnails/{name}",
       "connection": "cognitiveazure_STORAGE",
-      "direction": "out"
+      "direction": "InOut"
     },
     {
       "type": "table",

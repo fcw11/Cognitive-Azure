@@ -9,10 +9,11 @@ using System.Configuration;
 using System;
 using System.Text;
 using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.WindowsAzure.Storage.Blob;
 
-public static void Run(Stream input, Stream output, string name, TraceWriter log, CloudTable inputTable)
+public static void Run(Stream input, CloudBlockBlob output, string name, TraceWriter log, CloudTable inputTable)
 {
-    log.Info("Start");
+    log.Info("Startbbb");
 
     var cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
@@ -30,11 +31,11 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
 
         var response = client.PostAsync(uri, content).Result;
 
-        var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+        var responseBytes = response.Content.ReadAsStreamAsync().Result;
 
         if (response.IsSuccessStatusCode)
         {
-            output.Write(responseBytes, 0, responseBytes.Length);
+            output.UploadFromStreamAsync(responseBytes).Wait();
         }
     }
 
@@ -44,7 +45,7 @@ public static void Run(Stream input, Stream output, string name, TraceWriter log
 
     var image = tableQueryResult.Results.Single();
 
-    image.ThumbUri = "Hello World";
+    image.ThumbUri = output.Uri.AbsoluteUri;
 
     var updateOperation = TableOperation.Replace(image);
 
