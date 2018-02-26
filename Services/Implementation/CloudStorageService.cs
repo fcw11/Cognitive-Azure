@@ -74,7 +74,7 @@ namespace Services.Implementation
             var table = tableClient.GetTableReference("images");
 
             var tableQuery = new TableQuery<Image>();
-
+            
             var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
 
             return tableQueryResult.Results.AsQueryable();

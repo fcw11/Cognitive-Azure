@@ -2,5 +2,5 @@
 
 @foreach (var image in Model)
 {
-    <img src="@image.ThumbUri" alt="@image.Description" title="@image.Description" />
+    <img src="@image.ThumbUri" alt="@image.OtherDescription.Description.Captions[0].Text" title="@image.OtherDescription.Description.Captions[0].Text" />
 }
