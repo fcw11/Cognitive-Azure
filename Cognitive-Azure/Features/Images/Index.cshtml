@@ -1,2 +1,6 @@
-﻿
-hello world
+﻿@model List<Services.Entities.Image>
+
+@foreach (var image in Model)
+{
+    <img src="@image.ThumbUri" alt="@image.Description" title="@image.Description" />
+}

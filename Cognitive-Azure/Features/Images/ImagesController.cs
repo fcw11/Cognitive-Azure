@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
 namespace Cognitive_Azure.Features.Images
@@ -15,8 +16,8 @@ namespace Cognitive_Azure.Features.Images
         public IActionResult Index()
         {
             var items = CloudStorageService.RetrieveImages();
-            
-            return View();
+
+            return View(items.ToList());
         }
 
         [HttpGet]

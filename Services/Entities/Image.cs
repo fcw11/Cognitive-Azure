@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Storage.Table;
+using Services.Entities.JSON;
 
 namespace Services.Entities
 {
@@ -21,5 +22,9 @@ namespace Services.Entities
         public string Uri { get; set; }
 
         public string ThumbUri { get; set; }
+
+        public string Description { get; set; }
+
+        public ImageDescription OtherDescription => ImageDescription.FromJson(Description);
     }
 }
