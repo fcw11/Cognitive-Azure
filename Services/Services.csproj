@@ -23,4 +23,8 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy $(OutDir)$(TargetFileName) $(SolutionDir)Functions\bin" />
+  </Target>
+
 </Project>

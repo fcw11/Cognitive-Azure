@@ -3,6 +3,11 @@
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="bin\Services.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="2.1.0-beta1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="1.0.0-beta1" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.0-alpha6" />
