@@ -8,40 +8,49 @@ using System.Web;
 using System.Configuration;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-public static void Run(Stream input, CloudBlockBlob output, string name, TraceWriter log, CloudTable inputTable)
+public static async Task Run(Stream input, CloudBlockBlob output, string name, TraceWriter log, CloudTable inputTable)
 {
-    log.Info("Startbbb");
+    log.Info("Start");
+
+    await CreateThumbnail(input, output, name, log, inputTable);
+
+    log.Info("Finish");
+}
+
+static async Task CreateThumbnail(Stream input, CloudBlockBlob output, string name, TraceWriter log, CloudTable inputTable)
+{
 
     var cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
-    var client = new HttpClient();
-
-    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
-
     using (HttpContent content = new StreamContent(input))
     {
+        content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
+
         var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"];
 
         var uri = visionUri + "generateThumbnail?width=200&height=150&smartCropping=true";
 
-        content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
+        var client = new HttpClient();
 
-        var response = client.PostAsync(uri, content).Result;
+        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
 
-        var responseBytes = response.Content.ReadAsStreamAsync().Result;
+        var response = await client.PostAsync(uri, content);
+
+        var responseBytes = await response.Content.ReadAsStreamAsync();
 
         if (response.IsSuccessStatusCode)
         {
-            output.UploadFromStreamAsync(responseBytes).Wait();
+            await output.UploadFromStreamAsync(responseBytes);
         }
     }
 
     var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, name));
 
-    var tableQueryResult = inputTable.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
+    var tableQueryResult = await inputTable.ExecuteQuerySegmentedAsync(tableQuery, null);
 
     var image = tableQueryResult.Results.Single();
 
@@ -49,7 +58,5 @@ public static void Run(Stream input, CloudBlockBlob output, string name, TraceWr
 
     var updateOperation = TableOperation.Replace(image);
 
-    inputTable.Execute(updateOperation); ;
-
-    log.Info("Finish");
+    await inputTable.ExecuteAsync(updateOperation); ;
 }
