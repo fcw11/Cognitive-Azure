@@ -2,7 +2,5 @@
 
 @foreach (var image in Model)
 {
-    <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey">
-        <img src="@image.ThumbUri" alt="@image.OtherDescription?.Description?.Captions[0].Text" title="@image.OtherDescription?.Description?.Captions[0].Text" />
-    </a>
+    <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey"><img src="@image.ThumbUri" alt="@image.OtherDescription?.Description?.Captions[0].Text" title="@image.OtherDescription?.Description?.Captions[0].Text"/></a>
 }
