@@ -1,0 +1,47 @@
+﻿@model Services.Entities.Image   
+
+<div class="row">
+    
+    <div class="col-md-9">
+        <img src="@Model.Uri" alt="@Model.OtherDescription.Description.Captions[0].Text" title="@Model.OtherDescription.Description.Captions[0].Text" class="image"/>
+    </div>
+    
+    <div class="col-md-3">
+
+        <h6>Captions</h6>
+
+        <div class="text-muted">
+            @foreach (var caption in Model.OtherDescription.Description.Captions)
+            {
+                <p title="Confidence @caption.Confidence">@caption.Text</p>
+            }
+        </div>
+
+        <h6>Tags</h6>
+
+        <div class="text-muted">
+            @if (!Model.OtherDescription.Description.Tags.Any())
+            {
+                <p>No Tags </p>
+            }
+            else
+            {
+                <p>
+                    @foreach (var descriptionTag in Model.OtherDescription.Description.Tags)
+                    {
+                        <text>#@descriptionTag </text>
+                    }
+                </p>
+            }
+        </div>
+        
+        <h6>Metadata</h6>
+        
+        <div class="text-muted">
+            <p>Filename : @Model.Name</p>
+            <p>Format : @Model.OtherDescription.Metadata.Format</p>
+            <p>Width : @Model.OtherDescription.Metadata.Width</p>
+            <p>Height : @Model.OtherDescription.Metadata.Height</p>
+        </div>
+    </div>
+</div>

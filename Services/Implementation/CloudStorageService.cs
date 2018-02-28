@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -60,7 +61,9 @@ namespace Services.Implementation
 
             await table.CreateIfNotExistsAsync();
 
-            var entity = new Image(file.FileName, imageId) { Uri = blobUri.AbsoluteUri };
+            var fileName = Path.GetFileName(file.FileName);
+
+            var entity = new Image(imageId) { Name = fileName, Uri = blobUri.AbsoluteUri };
 
             var insertOperation = TableOperation.Insert(entity);
 
@@ -78,6 +81,19 @@ namespace Services.Implementation
             var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
 
             return tableQueryResult.Results.AsQueryable();
+        }
+
+        public Image RetrieveImage(Guid id)
+        {
+            var tableClient = _cloudStorageAccount.CreateCloudTableClient();
+
+            var table = tableClient.GetTableReference("images");
+
+            var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, id.ToString()));
+
+            var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
+
+            return tableQueryResult.Results.Single();
         }
     }
 }

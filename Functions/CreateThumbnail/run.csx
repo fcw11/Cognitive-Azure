@@ -23,7 +23,6 @@ public static async Task Run(Stream input, CloudBlockBlob output, string name, T
 
 static async Task CreateThumbnail(Stream input, CloudBlockBlob output, string name, TraceWriter log, CloudTable inputTable)
 {
-
     var cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
     using (HttpContent content = new StreamContent(input))

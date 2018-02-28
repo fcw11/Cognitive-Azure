@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -20,6 +21,13 @@ namespace Cognitive_Azure.Features.Images
             return View(items.ToList());
         }
 
+        public IActionResult View(Guid id)
+        {
+            var item = CloudStorageService.RetrieveImage(id);
+
+            return View(item);
+        }
+
         [HttpGet]
         public IActionResult Upload()
         {
@@ -32,6 +40,8 @@ namespace Cognitive_Azure.Features.Images
             if (ModelState.IsValid)
             {
                 CloudStorageService.UploadImage(model.Image);
+
+                return RedirectToAction("Index", "Images");
             }
 
             return View(model);

@@ -8,11 +8,9 @@ namespace Services.Entities
     {
         public Image() { }
 
-        public Image(string name, Guid rowKey) : base(rowKey.ToString(), rowKey.ToString())
+        public Image(Guid rowKey) : base(rowKey.ToString(), rowKey.ToString())
         {
             CreatedDate = DateTime.UtcNow;
-
-            Name = name;
         }
 
         public string Name { get; set; }
@@ -25,6 +23,6 @@ namespace Services.Entities
 
         public string Description { get; set; }
 
-        public ImageDescription OtherDescription => ImageDescription.FromJson(Description);
+        public ImageDescription OtherDescription => !string.IsNullOrEmpty(Description) ? ImageDescription.FromJson(Description) : null;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Services.Entities;
 
@@ -8,5 +9,6 @@ namespace Services.Interfaces
     {
         void UploadImage(IFormFile file);
         IQueryable<Image> RetrieveImages();
+        Image RetrieveImage(Guid id);
     }
 }
