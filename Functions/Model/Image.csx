@@ -21,4 +21,10 @@ public class Image : TableEntity
     public string ThumbUri { get; set; }
 
     public string Description { get; set; }
+
+    public string Analyse { get; set; }
+
+    public string OCR { get; set; }
+
+    public string Tag { get; set; }
 }
