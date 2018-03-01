@@ -27,4 +27,6 @@ public class Image : TableEntity
     public string OCR { get; set; }
 
     public string Tag { get; set; }
+
+    public string Operation_Location { get; set;}
 }
