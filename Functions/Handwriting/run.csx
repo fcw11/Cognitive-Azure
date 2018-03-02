@@ -11,14 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 
-public static async Task Run(Stream myBlob, string name, CloudTable inputTable, TraceWriter log)
+public static async Task Run(Stream myBlob, string name, ICollector<string> queueItem, TraceWriter log)
 {
     log.Info("Start");
-    await MakeRequest(myBlob, inputTable, name, log);
+    await MakeRequest(myBlob, name, queueItem, log);
     log.Info("Finish");
 }
 
-static async Task MakeRequest(Stream myBlob, CloudTable inputTable, string name, TraceWriter log)
+static async Task MakeRequest(Stream myBlob, string name, ICollector<string> queueItem, TraceWriter log)
 {
     string cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
@@ -36,18 +36,10 @@ static async Task MakeRequest(Stream myBlob, CloudTable inputTable, string name,
 
         var response = await client.PostAsync(visionUri, content);
 
-        answer = await response.Content.ReadAsStringAsync();
+        answer = response.Headers.GetValues("Operation-Location").FirstOrDefault();
+
+        log.Info(answer);
+
+        queueItem.Add(answer);
     }
-
-    var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, name));
-
-    var tableQueryResult = await inputTable.ExecuteQuerySegmentedAsync(tableQuery, null);
-
-    var image = tableQueryResult.Results.Single();
-
-    image.Operation_Location = answer;
-
-    var updateOperation = TableOperation.Replace(image);
-
-    await inputTable.ExecuteAsync(updateOperation); ;
 }

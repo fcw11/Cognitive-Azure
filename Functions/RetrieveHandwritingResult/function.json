@@ -1,11 +1,20 @@
 {
   "bindings": [
     {
-      "name": "myBlob",
-      "type": "blobTrigger",
+      "name": "item",
+      "type": "queueTrigger",
       "direction": "in",
-      "path": "images/{name}",
+      "queueName": "retrievehandwritingresult",
       "connection": "cognitiveazure_STORAGE"
+    },
+    {
+      "type": "table",
+      "name": "inputTable",
+      "tableName": "images",
+      "rowKey": "{name}",
+      "take": 1,
+      "connection": "cognitiveazure_STORAGE",
+      "direction": "in"
     },
     {
       "type": "queue",

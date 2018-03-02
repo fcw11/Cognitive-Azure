@@ -22,6 +22,12 @@
     <None Update="Handwriting\run.csx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="RetrieveHandwritingResult\function.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RetrieveHandwritingResult\run.csx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Tag\function.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
