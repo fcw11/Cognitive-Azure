@@ -28,7 +28,9 @@ static async Task MakeRequest(Stream myBlob, CloudTable inputTable, string name,
     {
         content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
-        var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"] + "analyze";
+        var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"] + "analyze" +
+            "?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color,Adult" +
+            "&details=Celebrities,Landmarks";
 
         var client = new HttpClient();
 
