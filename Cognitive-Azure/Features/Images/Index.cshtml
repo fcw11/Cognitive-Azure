@@ -1,6 +1,16 @@
 ﻿@model List<Services.Entities.Image>
-
-@foreach (var image in Model)
-{
-    <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey"><img src="@image.ThumbUri" alt="@image.OtherDescription?.Description?.Captions[0].Text" title="@image.OtherDescription?.Description?.Captions[0].Text"/></a>
-}
+    
+<div class="container container-outline">
+    <div class="row row-padding">
+        @foreach (var image in Model)
+        {
+            <div class="col-md-3">
+                <div class="card box-shadow">
+                    <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey">
+                        <img class="card-img-top card-img-bottom" src="@image.ThumbUri" title="@image.OtherDescription?.Description?.Captions[0].Text" alt="@image.OtherDescription?.Description?.Captions[0].Text" display: block;">
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

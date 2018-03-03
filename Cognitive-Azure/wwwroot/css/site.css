@@ -52,3 +52,18 @@
  .image {
      max-width: 100%;
  }
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.row-padding {
+    padding-top: 15px;
+}
+
+.container-outline {
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 15px;
+}
