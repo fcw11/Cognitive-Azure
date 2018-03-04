@@ -67,3 +67,7 @@
     border-bottom: 1px solid #dee2e6;
     padding-bottom: 15px;
 }
+
+.requirements-text {
+    font-style: italic;
+}

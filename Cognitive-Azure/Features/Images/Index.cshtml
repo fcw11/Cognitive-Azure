@@ -2,6 +2,16 @@
     
 <div class="container container-outline">
     <div class="row row-padding">
+
+        @if (!Model.Any())
+        {
+            <div class="col-md-12">
+                <div>
+                    No images to view, try <a asp-action="Upload" asp-controller="Images">uploading</a> one.
+                </div>
+            </div>
+        }
+
         @foreach (var image in Model)
         {
             <div class="col-md-3">
