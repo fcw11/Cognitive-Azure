@@ -16,15 +16,15 @@ public static async Task Run(string item, CloudTable inputTable, ICollector<stri
 
     string cogKey = ConfigurationManager.AppSettings["CognitiveService"];
 
+    var client = new HttpClient();
+
+    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
+
     string contentString;
     int i = 0;
     do
     {
         System.Threading.Thread.Sleep(1000);
-
-        var client = new HttpClient();
-
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
 
         var response = await client.GetAsync(item);
 
@@ -34,7 +34,7 @@ public static async Task Run(string item, CloudTable inputTable, ICollector<stri
 
         i++;
     }
-    while (i < 10 && contentString.IndexOf("\"status\":\"Succeeded\"") == -1);
+    while (i < 5 && contentString.IndexOf("\"status\":\"Succeeded\"") == -1);
 
     log.Info(contentString);
 }

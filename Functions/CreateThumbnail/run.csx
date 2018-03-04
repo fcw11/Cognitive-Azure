@@ -33,17 +33,18 @@ static async Task CreateThumbnail(Stream input, CloudBlockBlob output, string na
 
         var uri = visionUri + "generateThumbnail?width=200&height=150&smartCropping=true";
 
-        var client = new HttpClient();
-
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
-
-        var response = await client.PostAsync(uri, content);
-
-        var responseBytes = await response.Content.ReadAsStreamAsync();
-
-        if (response.IsSuccessStatusCode)
+        using (var client = new HttpClient())
         {
-            await output.UploadFromStreamAsync(responseBytes);
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
+
+            var response = await client.PostAsync(uri, content);
+
+            var responseBytes = await response.Content.ReadAsStreamAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                await output.UploadFromStreamAsync(responseBytes);
+            }
         }
     }
 

@@ -30,16 +30,17 @@ static async Task MakeRequest(Stream myBlob, string name, ICollector<string> que
 
         var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"] + "recognizeText?handwriting=true";
 
-        var client = new HttpClient();
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
 
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
+            var response = await client.PostAsync(visionUri, content);
 
-        var response = await client.PostAsync(visionUri, content);
+            answer = response.Headers.GetValues("Operation-Location").FirstOrDefault();
 
-        answer = response.Headers.GetValues("Operation-Location").FirstOrDefault();
+            log.Info(answer);
 
-        log.Info(answer);
-
-        queueItem.Add(answer);
+            queueItem.Add(answer);
+        }
     }
 }

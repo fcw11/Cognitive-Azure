@@ -30,13 +30,14 @@ static async Task MakeRequest(Stream myBlob, CloudTable inputTable, string name,
 
         var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"] + "describe?maxCandidates=1";
 
-        var client = new HttpClient();
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
 
-        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
+            var response = await client.PostAsync(visionUri, content);
 
-        var response = await client.PostAsync(visionUri, content);
-
-        answer = await response.Content.ReadAsStringAsync();
+            answer = await response.Content.ReadAsStringAsync();
+        }
     }
 
     var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, name));
