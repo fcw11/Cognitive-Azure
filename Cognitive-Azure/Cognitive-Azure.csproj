@@ -29,6 +29,9 @@
     <Reference Include="System.Drawing">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>C:\Users\paulb\.nuget\packages\microsoft.aspnet.webapi.core\5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

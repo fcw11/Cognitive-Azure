@@ -12,7 +12,7 @@ namespace Cognitive_Azure.Features.Images
         [System.ComponentModel.DataAnnotations.DataType(DataType.Upload)]
         public IFormFile Image { get; set; }
 
-        [FileExtensions(Extensions = (".png,.jpg,.jpeg,.gif"))]
+        [FileExtensions(Extensions = (".JPEG, .PNG, .GIF, .BMP"))]
         public string ImageName => Image != null ? Image.FileName : string.Empty;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

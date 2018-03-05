@@ -6,28 +6,33 @@
         <div class="col-md-12"> 
             <div>
                 <h3>Upload Image</h3>
-                Images must meet the <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home#requirements" target="_blank">requirements</a> of the <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home" target="_blank">Azure Computer Vision API</a>
-                <h5>Requirements</h5>
-                <ul class="requirements-text">
-                    <li>Supported image formats: JPEG, PNG, GIF, BMP.</li>
-                    <li>Image file size: Less than 4 MB.</li>
-                    <li>Image dimension: Greater than 50 x 50 pixels.</li>
-                </ul>
+               
+
             </div>
         </div>
+        
+        @Html.Partial("_ValidationSummary")
 
         <div class="col-md-12">
-            <div>@Html.ValidationSummary()</div>
-        </div>
-
-        <div class="col-md-12">
-            <div>
+            <div class="image-upload-form">
                 <form asp-controller="Images" asp-action="Upload" method="post" enctype="multipart/form-data">
                     <p>
                         @Html.EditorFor(x => x.Image)
                         <input type="submit" value="Upload" />
                     </p>
                 </form>
+            </div>
+        </div>
+        
+        <div class="col-md-12"> 
+            <div class="image-requirements-block"> 
+                Images must also meet the following <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home#requirements" target="_blank">requirements</a> of the <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home" target="_blank">Azure Computer Vision API</a>.
+                <h5>Requirements</h5>
+                <ul class="image-requirements-text">
+                    <li>Supported image formats: JPEG, PNG, GIF, BMP.</li>
+                    <li>Image file size: Less than 4 MB.</li>
+                    <li>Image dimension: Greater than 50 x 50 pixels.</li>
+                </ul>
             </div>
         </div>
     </div>

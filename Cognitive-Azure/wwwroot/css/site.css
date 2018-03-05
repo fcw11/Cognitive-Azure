@@ -68,6 +68,19 @@
     padding-bottom: 15px;
 }
 
-.requirements-text {
+.image-requirements-text {
     font-style: italic;
+}
+
+ .image-requirements-block {
+     font-size: 14px;
+     padding-top: 30px;
+ }
+
+ .image-upload-form {
+     padding-top: 30px;
+ }
+
+.validation-summary-errors {
+    color: red;
 }
