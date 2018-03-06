@@ -23,6 +23,12 @@ namespace Services.Entities
 
         public string Description { get; set; }
 
-        public ImageDescription OtherDescription => !string.IsNullOrEmpty(Description) ? ImageDescription.FromJson(Description) : null;
+        public string Analyse { get; set; }
+
+        public string OCR { get; set; }
+
+        public string Tag { get; set; }
+
+        public ImageDescription ImageDescription => !string.IsNullOrEmpty(Description) ? ImageDescription.FromJson(Description) : null;
     }
 }
