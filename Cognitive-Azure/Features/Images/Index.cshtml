@@ -1,26 +1,37 @@
-﻿@model List<Services.Entities.Image>
-    
-<div class="container container-outline">
-    <div class="row row-padding">
+﻿@using Services.Entities
+@model List<Image>
+@{
+    var index = 0;
+    var imagesPerRow = 4;
+}
 
-        @if (!Model.Any())
-        {
+<div class="container container-outline">
+
+    @if (!Model.Any())
+    {
+        <div class="row row-padding">
             <div class="col-md-12">
                 <div>
                     No images to view, try <a asp-action="Upload" asp-controller="Images">uploading</a> one.
                 </div>
             </div>
-        }
-
-        @foreach (var image in Model)
-        {
-            <div class="col-md-3">
-                <div class="card box-shadow">
-                    <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey">
-                        <img class="card-img-top card-img-bottom" src="@image.ThumbUri" title="@image.ImageDescription?.Description?.Captions[0].Text" alt="@image.ImageDescription?.Description?.Captions[0].Text" display: block;">
-                    </a>
-                </div>
-            </div>
-        }
-    </div>
+        </div>
+    }
+    
+    @do
+    {
+        <div class="row row-padding">
+            @foreach (var image in Model.Skip(index * imagesPerRow).Take(imagesPerRow))
+            {
+                <div class="col-md-3 image_card">
+                    <div class="card box-shadow">
+                        <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey">
+                            <img class="card-img-top card-img-bottom" src="@image.ThumbUri" title="@image.ImageDescription?.Description?.Captions[0].Text" alt="@image.ImageDescription?.Description?.Captions[0].Text" display: block;">
+                        </a>
+                    </div>
+                </div> 
+            }
+        </div>
+        index++;
+    } while (index * imagesPerRow < Model.Count);
 </div>
