@@ -1,6 +1,11 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
+using Services.Entities.JSON.Analyse;
+using Services.Entities.JSON.Describe;
+using Services.Entities.JSON.OCR;
+using Services.Entities.JSON.Tags;
+using Description = Services.Entities.JSON.Describe.Description;
 
 namespace Services.Entities
 {
@@ -23,12 +28,18 @@ namespace Services.Entities
 
         public string Description { get; set; }
 
+        public Describe DeseralisedDescription => !string.IsNullOrEmpty(Description) ? JSONHelper.FromJson<Describe>(Description) : null;
+
         public string Analyse { get; set; }
+
+        public Analyse DeseralisedAnalyse => !string.IsNullOrEmpty(Analyse) ? JSONHelper.FromJson<Analyse>(Analyse) : null;
 
         public string OCR { get; set; }
 
+        public OCR DeseralisedOCR => !string.IsNullOrEmpty(OCR) ? JSONHelper.FromJson<OCR>(OCR) : null;
+
         public string Tag { get; set; }
 
-        public ImageDescription ImageDescription => !string.IsNullOrEmpty(Description) ? ImageDescription.FromJson(Description) : null;
+        public Tags DeseralisedTag => !string.IsNullOrEmpty(Tag) ? JSONHelper.FromJson<Tags>(Tag) : null;
     }
 }

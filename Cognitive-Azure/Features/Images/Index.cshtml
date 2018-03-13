@@ -26,7 +26,7 @@
                 <div class="col-md-3 image_card">
                     <div class="card box-shadow">
                         <a asp-action="View" asp-controller="Images" asp-route-id="@image.RowKey">
-                            <img class="card-img-top card-img-bottom" src="@image.ThumbUri" title="@image.ImageDescription?.Description?.Captions[0].Text" alt="@image.ImageDescription?.Description?.Captions[0].Text" display: block;">
+                            <img class="card-img-top card-img-bottom" src="@image.ThumbUri" title="@image.DeseralisedAnalyse?.Description?.Captions[0].Text" alt="@image.DeseralisedAnalyse?.Description?.Captions[0].Text" display: block;">
                         </a>
                     </div>
                 </div> 

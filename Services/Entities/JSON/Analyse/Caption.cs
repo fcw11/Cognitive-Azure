@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Services.Entities.JSON
+namespace Services.Entities.JSON.Analyse
 {
     public class Caption
     {

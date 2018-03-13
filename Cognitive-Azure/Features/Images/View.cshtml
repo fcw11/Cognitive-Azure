@@ -6,7 +6,7 @@
 
         <div class="col-md-9">
             <div class="card box-shadow">
-                <img src="@Model.Uri" alt="@Model.ImageDescription.Description.Captions[0].Text" title="@Model.ImageDescription.Description.Captions[0].Text" class="image" />
+                <img src="@Model.Uri" alt="@Model.DeseralisedAnalyse?.Description?.Captions[0].Text" title="@Model.DeseralisedAnalyse?.Description?.Captions[0].Text" class="image" />
             </div>
         </div>
         <div class="col-md-3">
@@ -14,7 +14,7 @@
             <h6>Captions</h6>
 
             <div class="text-muted">
-                @foreach (var caption in Model.ImageDescription.Description.Captions)
+                @foreach (var caption in @Model.DeseralisedAnalyse.Description.Captions)
                 {
                     <p title="Confidence @caption.Confidence">@caption.Text</p>
                 }
@@ -23,14 +23,14 @@
             <h6>Tags</h6>
 
             <div class="text-muted">
-                @if (!Model.ImageDescription.Description.Tags.Any())
+                @if (!@Model.DeseralisedAnalyse.Description.Tags.Any())
                 {
                     <p>No Tags </p>
                 }
                 else
                 {
                     <p>
-                        @foreach (var descriptionTag in Model.ImageDescription.Description.Tags)
+                        @foreach (var descriptionTag in @Model.DeseralisedAnalyse.Description.Tags)
                         {
                             <text>#@descriptionTag </text>
                         }
@@ -42,9 +42,9 @@
 
             <div class="text-muted">
                 <p>Filename : @Model.Name</p>
-                <p>Format : @Model.ImageDescription.Metadata.Format</p>
-                <p>Width : @Model.ImageDescription.Metadata.Width</p>
-                <p>Height : @Model.ImageDescription.Metadata.Height</p>
+                <p>Format : @Model.DeseralisedAnalyse.Metadata.Format</p>
+                <p>Width : @Model.DeseralisedAnalyse.Metadata.Width</p>
+                <p>Height : @Model.DeseralisedAnalyse.Metadata.Height</p>
             </div>
         </div>
     </div>
