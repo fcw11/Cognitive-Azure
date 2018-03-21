@@ -5,7 +5,6 @@ using Services.Entities.JSON.Analyse;
 using Services.Entities.JSON.Describe;
 using Services.Entities.JSON.OCR;
 using Services.Entities.JSON.Tags;
-using Description = Services.Entities.JSON.Describe.Description;
 
 namespace Services.Entities
 {
