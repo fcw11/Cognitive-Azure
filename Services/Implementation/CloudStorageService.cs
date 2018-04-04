@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities;
 using Services.Interfaces;
@@ -16,21 +16,55 @@ namespace Services.Implementation
     {
         public IConfiguration Configuration { get; set; }
 
-        private readonly string _accountName;
-        private readonly string _key;
-        private readonly string _containerName;
-        private CloudStorageAccount _cloudStorageAccount;
+        private readonly string _imagesContainerName;
+        private readonly string _thumbnailsContainerName;
+
+        private readonly CloudStorageAccount _cloudStorageAccount;
 
 
         public CloudStorageService(IConfiguration configuration)
         {
             Configuration = configuration;
 
-            _accountName   = Configuration["BlobAccountName"];
-            _key           = Configuration["BlobStorageAPIKey"];
-            _containerName = Configuration["ImageContainerName"];
+            var cloudConnectionString   = Configuration["BlobConnectionString"];
 
-            _cloudStorageAccount = new CloudStorageAccount(new StorageCredentials(_accountName, _key), true);
+            _imagesContainerName = Configuration["ImageContainerName"];
+
+            _thumbnailsContainerName = Configuration["ThumbnailsContainerName"];
+
+            _cloudStorageAccount = CloudStorageAccount.Parse(cloudConnectionString);
+        }
+
+
+        public async Task CreateContainersIfNotExist()
+        {
+            var blobClient      = _cloudStorageAccount.CreateCloudBlobClient();
+            var imagesContainer = blobClient.GetContainerReference(_imagesContainerName);
+
+            await imagesContainer.CreateIfNotExistsAsync();
+
+            var imagesContainerpermissions = await imagesContainer.GetPermissionsAsync();
+
+            imagesContainerpermissions.PublicAccess = BlobContainerPublicAccessType.Container;
+
+            await imagesContainer.SetPermissionsAsync(imagesContainerpermissions);
+
+
+            var thumbnailsContainer = blobClient.GetContainerReference(_thumbnailsContainerName);
+
+            await thumbnailsContainer.CreateIfNotExistsAsync();
+
+            var thumbnailsContainerPermissions = await thumbnailsContainer.GetPermissionsAsync();
+
+            thumbnailsContainerPermissions.PublicAccess = BlobContainerPublicAccessType.Container;
+
+            await thumbnailsContainer.SetPermissionsAsync(thumbnailsContainerPermissions);
+
+
+            var cloudTableClient = _cloudStorageAccount.CreateCloudTableClient();
+            var cloudTable       = cloudTableClient.GetTableReference(_imagesContainerName);
+
+            await cloudTable.CreateIfNotExistsAsync();
         }
 
         public async void UploadImage(IFormFile file)
@@ -43,28 +77,23 @@ namespace Services.Implementation
         private async Task UploadImageToBlob(IFormFile file, Guid imageName)
         {
             var blobClient     = _cloudStorageAccount.CreateCloudBlobClient();
-            var blobContainer  = blobClient.GetContainerReference(_containerName);
-            var blockBlob      = blobContainer.GetBlockBlobReference(imageName.ToString());
+            var blobContainer  = blobClient.GetContainerReference(_imagesContainerName);
 
-            var stream = file.OpenReadStream();
+            var blockBlob  = blobContainer.GetBlockBlobReference(imageName.ToString());
+            var stream     = file.OpenReadStream();
 
             blockBlob.UploadFromStreamAsync(stream).Wait();
 
-            await UploadImageInfomationToTable(file, imageName, blockBlob.Uri);
+            await UploadImageInformationToTable(file, imageName, blockBlob.Uri);
         }
 
-        private async Task UploadImageInfomationToTable(IFormFile file, Guid imageId, Uri blobUri)
+        private async Task UploadImageInformationToTable(IFormFile file, Guid imageId, Uri blobUri)
         {
             var tableClient = _cloudStorageAccount.CreateCloudTableClient();
+            var table       = tableClient.GetTableReference(_imagesContainerName);
 
-            var table = tableClient.GetTableReference("images");
-
-            await table.CreateIfNotExistsAsync();
-
-            var fileName = Path.GetFileName(file.FileName);
-
-            var entity = new Image(imageId) { Name = fileName, Uri = blobUri.AbsoluteUri };
-
+            var fileName        = Path.GetFileName(file.FileName);
+            var entity          = new Image(imageId) { Name = fileName, Uri = blobUri.AbsoluteUri };
             var insertOperation = TableOperation.Insert(entity);
 
             await table.ExecuteAsync(insertOperation);
@@ -73,11 +102,9 @@ namespace Services.Implementation
         public IQueryable<Image> RetrieveImages()
         {
             var tableClient = _cloudStorageAccount.CreateCloudTableClient();
+            var table       = tableClient.GetTableReference(_imagesContainerName);
 
-            var table = tableClient.GetTableReference("images");
-
-            var tableQuery = new TableQuery<Image>();
-            
+            var tableQuery       = new TableQuery<Image>();
             var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
 
             return tableQueryResult.Results.AsQueryable();
@@ -86,11 +113,9 @@ namespace Services.Implementation
         public Image RetrieveImage(Guid id)
         {
             var tableClient = _cloudStorageAccount.CreateCloudTableClient();
+            var table       = tableClient.GetTableReference(_imagesContainerName);
 
-            var table = tableClient.GetTableReference("images");
-
-            var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, id.ToString()));
-
+            var tableQuery       = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, id.ToString()));
             var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
 
             return tableQueryResult.Results.Single();

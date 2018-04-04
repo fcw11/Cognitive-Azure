@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +30,7 @@ namespace Cognitive_Azure
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ICloudStorageService cloudService)
         {
             if (env.IsDevelopment())
             {
@@ -62,6 +63,8 @@ namespace Cognitive_Azure
             app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
+
+            cloudService.CreateContainersIfNotExist().Wait();
         }
     }
 }
