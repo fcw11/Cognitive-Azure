@@ -3,39 +3,36 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Funcs.Functions
 {
-    public static class CreateThumbnail
+    public static class AnalyseImage
     {
-        [FunctionName("CreateThumbnail")]
+        [FunctionName("AnalyseImage")]
         public static async Task Run(
-            [BlobTrigger("images/{name}")] Stream trigger, 
-            [Blob("thumbnails/{name}", FileAccess.ReadWrite)] ICloudBlob thumbnail,
+            [BlobTrigger("images/{name}")] Stream trigger,
             [Table("images")] CloudTable cloudTable,
             string name,
-            TraceWriter log
-        )
+            TraceWriter log)
         {
             log.Info("Start");
 
             using (HttpContent content = new StreamContent(trigger))
             {
-                var parameters = "generateThumbnail?width=200&height=150&smartCropping=true";
+                var parameters = "analyze" +
+                                 "?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color,Adult" +
+                                 "&details=Celebrities,Landmarks";
 
                 var response = await CognitiveServicesHttpClient.PostRequest(content, parameters);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBytes = await response.Content.ReadAsStreamAsync(); 
-
-                    await thumbnail.UploadFromStreamAsync(responseBytes);
+                    var responseBytes = await response.Content.ReadAsStringAsync();
 
                     var image = await cloudTable.Retrieve(name);
 
-                    image.ThumbUri = thumbnail.Uri.AbsoluteUri;
+                    image.Analyse = responseBytes;
 
                     await cloudTable.Merge(image);
                 }
