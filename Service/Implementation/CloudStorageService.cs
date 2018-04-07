@@ -20,8 +20,7 @@ namespace Services.Implementation
         private readonly string _thumbnailsContainerName;
 
         private readonly CloudStorageAccount _cloudStorageAccount;
-
-
+        
         public CloudStorageService(IConfiguration configuration)
         {
             Configuration = configuration;
