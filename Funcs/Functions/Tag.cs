@@ -28,11 +28,10 @@ namespace Funcs.Functions
                 {
                     var responseBytes = await response.Content.ReadAsStringAsync();
 
-                    var image = await cloudTable.Retrieve(name);
-
-                    image.Tag = responseBytes;
-
-                    await cloudTable.Merge(image);
+                    await cloudTable.Update(name, responseBytes, (image, text) =>
+                    {
+                        image.Tag = text;
+                    });
                 }
             }
 

@@ -3,39 +3,34 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Funcs.Functions
 {
-    public static class CreateThumbnail
+    public static class OCR
     {
-        [FunctionName("CreateThumbnail")]
+        [FunctionName("OCR")]
         public static async Task Run(
-            [BlobTrigger("images/{name}")] Stream trigger, 
-            [Blob("thumbnails/{name}", FileAccess.ReadWrite)] ICloudBlob thumbnail,
+            [BlobTrigger("images/{name}")] Stream trigger,
             [Table("images")] CloudTable cloudTable,
-            string name,
-            TraceWriter log
-        )
+            string name, 
+            TraceWriter log)
         {
             log.Info("Start");
 
             using (HttpContent content = new StreamContent(trigger))
             {
-                var parameters = "generateThumbnail?width=200&height=150&smartCropping=true";
+                var parameters = "ocr?detectOrientation=true";
 
                 var response = await CognitiveServicesHttpClient.PostRequest(content, parameters);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBytes = await response.Content.ReadAsStreamAsync(); 
+                    var responseBytes = await response.Content.ReadAsStringAsync();
 
-                    await thumbnail.UploadFromStreamAsync(responseBytes);
-
-                    await cloudTable.Update(name, thumbnail.Uri.AbsoluteUri, (image, text) =>
+                    await cloudTable.Update(name, responseBytes, (image, text) =>
                     {
-                        image.ThumbUri = text;
+                        image.OCR = text;
                     });
                 }
             }

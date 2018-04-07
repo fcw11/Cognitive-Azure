@@ -29,12 +29,11 @@ namespace Funcs.Functions
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBytes = await response.Content.ReadAsStringAsync();
-
-                    var image = await cloudTable.Retrieve(name);
-
-                    image.Analyse = responseBytes;
-
-                    await cloudTable.Merge(image);
+                  
+                    await cloudTable.Update(name, responseBytes, (image, text) =>
+                    {
+                        image.Analyse = text;
+                    });
                 }
             }
 
