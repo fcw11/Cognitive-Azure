@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cognitive-Azure", "Cognitive-Azure\Cognitive-Azure.csproj", "{4264B76E-6C4C-43FE-B84D-7FE7E1A6AE6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funcs", "Funcs\Funcs.csproj", "{A9982AE3-B78E-485F-9122-5FB3D617BEA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Functions", "Functions\Functions.csproj", "{A9982AE3-B78E-485F-9122-5FB3D617BEA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Service\Services.csproj", "{D2DCE366-8BFF-4D7E-9BEA-7C88933F7720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Service\Services.csproj", "{D2DCE366-8BFF-4D7E-9BEA-7C88933F7720}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
