@@ -69,6 +69,9 @@
                     <a class="nav-link" id="ocr-tab" data-toggle="tab" href="#ocr" role="tab" aria-controls="ocr" aria-expanded="false">OCR</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" id="handwriting-tab" data-toggle="tab" href="#handwriting" role="tab" aria-controls="handwriting" aria-expanded="false">Handwriting</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="tag-tab" data-toggle="tab" href="#tag" role="tab" aria-controls="tag" aria-expanded="false">Tag</a>
                 </li>
             </ul>
@@ -81,6 +84,9 @@
                 </div>
                 <div class="tab-pane fade" id="ocr" role="tabpanel" aria-labelledby="ocr-tab" aria-expanded="false">
                     <pre>@Model.OCR?.PrettyPrintJson()</pre>
+                </div>
+                <div class="tab-pane fade" id="handwriting" role="tabpanel" aria-labelledby="handwriting-tab" aria-expanded="false">
+                    <pre>@Model.Handwriting?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="tag" role="tabpanel" aria-labelledby="tag-tab" aria-expanded="false">
                     <pre>@Model.Tag?.PrettyPrintJson()</pre>

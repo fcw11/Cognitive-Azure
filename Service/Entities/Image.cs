@@ -3,6 +3,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
 using Services.Entities.JSON.Describe;
+using Services.Entities.JSON.Handwriting;
 using Services.Entities.JSON.OCR;
 using Services.Entities.JSON.Tags;
 
@@ -40,5 +41,9 @@ namespace Services.Entities
         public string Tag { get; set; }
 
         public Tags DeseralisedTag => !string.IsNullOrEmpty(Tag) ? JSONHelper.FromJson<Tags>(Tag) : null;
+
+        public string Handwriting { get; set; }
+
+        public HandwritingRequest DeseralisedHandwriting => !string.IsNullOrEmpty(Handwriting) ? JSONHelper.FromJson<HandwritingRequest>(Handwriting) : null;
     }
 }

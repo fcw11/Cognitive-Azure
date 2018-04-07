@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
+using Services.Entities.JSON;
+using Services.Entities.JSON.Handwriting;
 
 namespace Funcs.Functions
 {
@@ -28,7 +30,15 @@ namespace Funcs.Functions
                 {
                     var operationLocation = response.Headers.GetValues("Operation-Location").FirstOrDefault();
 
-                    queueItem.Add(operationLocation);
+                    var request = new HandwritingRequest
+                    {
+                        Key               = name,
+                        OperationLocation = operationLocation
+                    };
+
+                    var json = JSONHelper.ToJson(request);
+
+                    queueItem.Add(json);
                 }
             }
 

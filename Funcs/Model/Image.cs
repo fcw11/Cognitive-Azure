@@ -29,5 +29,7 @@ namespace Funcs.Model
         public string OCR { get; set; }
 
         public string Tag { get; set; }
+
+        public string Handwriting { get; set; }
     }
 }
