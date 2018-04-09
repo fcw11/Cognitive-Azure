@@ -7,7 +7,7 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace Funcs.Functions
+namespace Functions.Functions
 {
     public static class CleanDown
     {
