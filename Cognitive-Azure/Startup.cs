@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +24,7 @@ namespace Cognitive_Azure
 
             services.AddMvc()
                     .AddFeatureFolders();
+
 
             services.AddSingleton<ICloudStorageService, CloudStorageService>();
         }
@@ -62,7 +62,13 @@ namespace Cognitive_Azure
 
             app.UseStaticFiles();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "",
+                    defaults: new { controller = "Images", action = "Index" });
+            });
 
             cloudService.CreateContainersIfNotExist().Wait();
         }
