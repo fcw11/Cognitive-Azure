@@ -64,10 +64,7 @@ namespace Cognitive_Azure
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "",
-                    defaults: new { controller = "Images", action = "Index" });
+                routes.MapRoute("default", "{controller=Images}/{action=Index}/{id?}");
             });
 
             cloudService.CreateContainersIfNotExist().Wait();
