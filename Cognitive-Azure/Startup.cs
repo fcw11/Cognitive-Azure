@@ -39,7 +39,7 @@ namespace Cognitive_Azure
             else
             {
                 app.UseSecurityHeaders(new HeaderPolicyCollection()
-                   .AddCustomHeader("Content-Security-Policy", "default-src 'none\';" +
+                   .AddCustomHeader("Content-Security-Policy-Report-Only", "default-src 'none\';" +
                                                                "script-src \'self\' https://cognitive-azure.azurewebsites.net https://maxcdn.bootstrapcdn.com https://code.jquery.com/;" +
                                                                "style-src \'self\' \'unsafe-inline\' https://maxcdn.bootstrapcdn.com;" +
                                                                "font-src \'self\' https://maxcdn.bootstrapcdn.com;" +
@@ -48,8 +48,7 @@ namespace Cognitive_Azure
                                                                "upgrade-insecure-requests;" +
                                                                "block-all-mixed-content;" +
                                                                "frame-ancestors 'none';" +
-                                                               "report-uri https://818ad812755587db2606b9d22c5ca5b7.report-uri.com/r/d/csp/wizard;" +
-                                                               "Content-Security-Policy-Report-Only")
+                                                               "report-uri https://818ad812755587db2606b9d22c5ca5b7.report-uri.com/r/d/csp/wizard;")
                    .AddCustomHeader("X-Content-Type-Options", "nosniff")
                    .AddCustomHeader("X-Frame-Options", "DENY")
                    .AddCustomHeader("X-XSS-Protection", "1; mode=block")
