@@ -39,7 +39,7 @@ namespace Cognitive_Azure
             else
             {
                 app.UseSecurityHeaders(new HeaderPolicyCollection()
-                   .AddCustomHeader("Content-Security-Policy-Report-Only", "default-src 'none\';" +
+                   .AddCustomHeader("Content-Security-Policy", "default-src 'none\';" +
                                                                "script-src \'self\' https://cognitive-azure.azurewebsites.net https://maxcdn.bootstrapcdn.com https://code.jquery.com/;" +
                                                                "style-src \'self\' \'unsafe-inline\' https://maxcdn.bootstrapcdn.com;" +
                                                                "font-src \'self\' https://maxcdn.bootstrapcdn.com;" +
