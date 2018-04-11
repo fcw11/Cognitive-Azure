@@ -47,7 +47,8 @@ namespace Cognitive_Azure
                                                                "form-action \'self\';" +
                                                                "upgrade-insecure-requests;" +
                                                                "block-all-mixed-content;" +
-                                                               "report-uri https://818ad812755587db2606b9d22c5ca5b7.report-uri.com/r/d/csp/enforce;")
+                                                               "report-uri https://818ad812755587db2606b9d22c5ca5b7.report-uri.com/r/d/csp/enforce;" +
+                                                               "Content-Security-Policy-Report-Only: default-src 'none'; form-action 'none'; frame-ancestors 'none'; report-uri https://818ad812755587db2606b9d22c5ca5b7.report-uri.com/r/d/csp/wizard")
                    .AddCustomHeader("X-Content-Type-Options", "nosniff")
                    .AddCustomHeader("X-Frame-Options", "DENY")
                    .AddCustomHeader("X-XSS-Protection", "1; mode=block")
