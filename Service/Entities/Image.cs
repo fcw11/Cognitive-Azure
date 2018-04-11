@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
@@ -45,5 +46,20 @@ namespace Services.Entities
         public string Handwriting { get; set; }
 
         public HandwritingRequest DeseralisedHandwriting => !string.IsNullOrEmpty(Handwriting) ? JSONHelper.FromJson<HandwritingRequest>(Handwriting) : null;
+
+        public string ImageUri
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ThumbUri) || DeseralisedAnalyse == null) return "/img/Processing.gif";
+
+                if(DeseralisedAnalyse.Adult.IsAdultContent || DeseralisedAnalyse.Adult.IsRacyContent)
+                {
+                    return "/img/nsfw.jpg";
+                }
+
+                return ThumbUri;
+            }
+        }
     }
 }

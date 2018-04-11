@@ -1,16 +1,18 @@
 ﻿@model Cognitive_Azure.Features.Images.Upload
 
 <div class="container container-outline">
+    <div class="alert alert-info layout-margin-top" role="alert">
+        <strong>Heads up!</strong> Images are removed daily and are not retained
+    </div>
+    
     <div class="row row-padding">
 
-        <div class="col-md-12"> 
+        <div class="col-md-12">
             <div>
                 <h3>Upload Image</h3>
-               
-
             </div>
         </div>
-        
+
         @Html.Partial("_ValidationSummary")
 
         <div class="col-md-12">
@@ -23,10 +25,12 @@
                 </form>
             </div>
         </div>
-        
-        <div class="col-md-12"> 
-            <div class="image-requirements-block"> 
-                Images must also meet the following <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home#requirements" target="_blank">requirements</a> of the <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home" target="_blank">Azure Computer Vision API</a>.
+
+        <div class="col-md-12">
+            <div class="image-requirements-block">
+                <p>
+                    Images must also meet the following <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home#requirements" target="_blank">requirements</a> of the <a href="https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home" target="_blank">Azure Computer Vision API</a>.
+                </p>
                 <h5>Requirements</h5>
                 <ul class="image-requirements-text">
                     <li>Supported image formats: JPEG, PNG, GIF, BMP.</li>

@@ -4,7 +4,7 @@
     var action = this.ViewContext.ActionDescriptor.RouteValues["action"];
 }
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs layout-margin-top">
     <li class="nav-item">
         <a asp-controller="Images" asp-action="Index" class="nav-link @(String.CompareOrdinal(action, "Index") == 0 ? "active" : string.Empty)" >List</a>
     </li>
