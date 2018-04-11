@@ -14,7 +14,7 @@ namespace Services.Entities.JSON.Analyse
         public Description Description { get; set; }
 
         [JsonProperty("faces")]
-        public object[] Faces { get; set; }
+        public Face[] Faces { get; set; }
 
         [JsonProperty("adult")]
         public Adult Adult { get; set; }
