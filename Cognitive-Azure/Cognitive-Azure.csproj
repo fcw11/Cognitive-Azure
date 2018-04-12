@@ -5,6 +5,7 @@
     <RootNamespace>Cognitive_Azure</RootNamespace>
     <AssemblyName>Cognitive_Azure</AssemblyName>
     <UserSecretsId>1f0ce2da-4052-4b49-b4a7-2e192014fcc5</UserSecretsId>
+	<PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
   <ItemGroup>
