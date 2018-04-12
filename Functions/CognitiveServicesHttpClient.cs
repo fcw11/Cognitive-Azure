@@ -7,15 +7,31 @@ namespace Funcs
 {
     public class CognitiveServicesHttpClient
     {
-        public static async Task<HttpResponseMessage> PostRequest(HttpContent content, string parameters)
+        public static async Task<HttpResponseMessage> PostVisionRequest(HttpContent content, string parameters)
         {
-            content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
-
-            var cogKey = ConfigurationManager.AppSettings["CognitiveService"];
+            var cogKey = ConfigurationManager.AppSettings["CognitiveVisionKey"];
 
             var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"];
 
             var uri = visionUri + parameters;
+
+            return await HttpResponseMessage(content, uri, cogKey);
+        }
+
+        public static async Task<HttpResponseMessage> PostFaceRequest(HttpContent content, string parameters)
+        {
+            var cogKey = ConfigurationManager.AppSettings["CognitiveFacesKey"];
+
+            var visionUri = ConfigurationManager.AppSettings["CognitiveFacesUri"];
+
+            var uri = visionUri + parameters;
+
+            return await HttpResponseMessage(content, uri, cogKey);
+        }
+
+        private static async Task<HttpResponseMessage> HttpResponseMessage(HttpContent content, string uri, string cogKey)
+        {
+            content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
             using (var client = new HttpClient())
             {

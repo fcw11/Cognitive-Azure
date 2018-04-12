@@ -23,7 +23,7 @@ namespace Functions.Functions
             {
                 var parameters = "tag";
 
-                var response = await CognitiveServicesHttpClient.PostRequest(content, parameters);
+                var response = await CognitiveServicesHttpClient.PostVisionRequest(content, parameters);
 
                 if (response.IsSuccessStatusCode)
                 {

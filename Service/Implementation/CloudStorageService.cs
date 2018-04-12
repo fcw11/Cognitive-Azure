@@ -18,6 +18,7 @@ namespace Services.Implementation
 
         private readonly string _imagesContainerName;
         private readonly string _thumbnailsContainerName;
+        private readonly string _facesContainerName;
 
         private readonly CloudStorageAccount _cloudStorageAccount;
         
@@ -30,6 +31,8 @@ namespace Services.Implementation
             _imagesContainerName = Configuration["ImageContainerName"];
 
             _thumbnailsContainerName = Configuration["ThumbnailsContainerName"];
+
+            _facesContainerName = Configuration["FacesContainerName"];
 
             _cloudStorageAccount = CloudStorageAccount.Parse(cloudConnectionString);
         }
@@ -60,6 +63,17 @@ namespace Services.Implementation
             await thumbnailsContainer.SetPermissionsAsync(thumbnailsContainerPermissions);
 
 
+            var facesContainer = blobClient.GetContainerReference(_facesContainerName);
+
+            await facesContainer.CreateIfNotExistsAsync();
+
+            var facesContainerPermissions = await facesContainer.GetPermissionsAsync();
+
+            facesContainerPermissions.PublicAccess = BlobContainerPublicAccessType.Container;
+
+            await facesContainer.SetPermissionsAsync(facesContainerPermissions);
+
+            
             var cloudTableClient = _cloudStorageAccount.CreateCloudTableClient();
             var cloudTable       = cloudTableClient.GetTableReference(_imagesContainerName);
 

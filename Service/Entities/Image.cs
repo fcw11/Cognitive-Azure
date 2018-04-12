@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
 using Services.Entities.JSON.Describe;
+using Services.Entities.JSON.Faces;
 using Services.Entities.JSON.Handwriting;
 using Services.Entities.JSON.OCR;
 using Services.Entities.JSON.Tags;
+using Face = Services.Entities.JSON.Faces.Face;
 
 namespace Services.Entities
 {
@@ -26,6 +27,8 @@ namespace Services.Entities
         public string Uri { get; set; }
 
         public string ThumbUri { get; set; }
+
+        public string FaceUri { get; set; }
 
         public string Description { get; set; }
 
@@ -47,7 +50,11 @@ namespace Services.Entities
 
         public HandwritingRequest DeseralisedHandwriting => !string.IsNullOrEmpty(Handwriting) ? JSONHelper.FromJson<HandwritingRequest>(Handwriting) : null;
 
-        public string ImageUri
+        public string Faces { get; set; }
+
+        public Face[] DeseralisedFaces => !string.IsNullOrEmpty(Faces) ? JSONHelper.FromJson<Face[]>(Faces) : null;
+
+        public string ImageThumbnailUri
         {
             get
             {
@@ -61,5 +68,7 @@ namespace Services.Entities
                 return ThumbUri;
             }
         }
+
+        public string FullImageUri => !string.IsNullOrEmpty(FaceUri) ? FaceUri : Uri;
     }
 }

@@ -31,5 +31,9 @@ namespace Funcs.Model
         public string Tag { get; set; }
 
         public string Handwriting { get; set; }
+
+        public string Faces { get; set; }
+
+        public string FaceUri { get; set; }
     }
 }

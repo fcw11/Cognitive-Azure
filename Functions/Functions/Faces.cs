@@ -8,23 +8,25 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Functions.Functions
 {
-    public static class DescribeImage
+    public static class Faces
     {
-        [FunctionName("DescribeImage")]
+        [FunctionName("Faces")]
         public static async Task Run(
             [BlobTrigger("images/{name}")] Stream trigger,
             [Table("images")] CloudTable cloudTable,
-            string name, 
+            string name,
             TraceWriter log)
         {
             log.Info("Start");
 
             using (HttpContent content = new StreamContent(trigger))
             {
-                var parameters = "describe" +
-                                 "?maxCandidates=1";
+                var parameters = "detect" +
+                                 "?returnFaceId=0" +
+                                 "&returnFaceLandmarks=1" +
+                                 "&returnFaceAttributes=age,gender,smile,facialHair,glasses,emotion,hair";
 
-                var response = await CognitiveServicesHttpClient.PostVisionRequest(content, parameters);
+                var response = await CognitiveServicesHttpClient.PostFaceRequest(content, parameters);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -32,7 +34,7 @@ namespace Functions.Functions
 
                     await cloudTable.Update(name, responseBytes, (image, text) =>
                     {
-                        image.Description = text;
+                        image.Faces = text;
                     });
                 }
             }

@@ -25,7 +25,7 @@ namespace Functions.Functions
             {
                 var parameters = "recognizeText?handwriting=true";
 
-                var response = await CognitiveServicesHttpClient.PostRequest(content, parameters);
+                var response = await CognitiveServicesHttpClient.PostVisionRequest(content, parameters);
 
                 if (response.IsSuccessStatusCode)
                 {

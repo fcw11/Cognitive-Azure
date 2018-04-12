@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Funcs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
@@ -20,14 +21,12 @@ namespace Functions.Functions
         public static async Task Run(
             [BlobTrigger("images/{name}")] Stream trigger,
             [Table("images")] CloudTable cloudTable,
-            [Blob("faces/{name}", FileAccess.Write)]
-            Stream outputStream,
+            [Blob("faces/{name}", FileAccess.ReadWrite)] ICloudBlob faceOutput,
             string name,
             TraceWriter log)
         {
-            var o = new MemoryStream();
-            trigger.CopyTo(o);
-            trigger.CopyTo(outputStream);
+            var analyseStream = new MemoryStream();
+            trigger.CopyTo(analyseStream);
 
             using (var ms = new MemoryStream())
             {
@@ -43,7 +42,7 @@ namespace Functions.Functions
                                      "?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color,Adult" +
                                      "&details=Celebrities,Landmarks";
 
-                    var response = await CognitiveServicesHttpClient.PostRequest(content, parameters);
+                    var response = await CognitiveServicesHttpClient.PostVisionRequest(content, parameters);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -57,7 +56,7 @@ namespace Functions.Functions
                         {
                             try
                             {
-                                using (var bitmap = new Bitmap(o))
+                                using (var bitmap = new Bitmap(analyseStream))
                                 {
                                     using (var graph = Graphics.FromImage(bitmap))
                                     {
@@ -72,7 +71,17 @@ namespace Functions.Functions
                                             graph.DrawString($"{face.Gender} {face.Age}", font, text.Brush, face.FaceRectangle.Left, face.FaceRectangle.Top);
                                         }
                                     }
+
+                                    var outputStream = new MemoryStream();
+
                                     bitmap.Save(outputStream, ImageFormat.Jpeg);
+
+                                    outputStream.Position = 0;
+                                    await faceOutput.UploadFromStreamAsync(outputStream);
+
+                                    //faceOutput.UploadFromStream(outputStream);
+
+                                    await cloudTable.Update(name, faceOutput.Uri.AbsoluteUri, (image, text) => { image.FaceUri = text; });
                                 }
                             }
                             catch (Exception ex)

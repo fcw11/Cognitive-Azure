@@ -26,7 +26,7 @@ namespace Functions.Functions
             {
                 var parameters = "generateThumbnail?width=200&height=150&smartCropping=true";
 
-                var response = await CognitiveServicesHttpClient.PostRequest(content, parameters);
+                var response = await CognitiveServicesHttpClient.PostVisionRequest(content, parameters);
 
                 if (response.IsSuccessStatusCode)
                 {
