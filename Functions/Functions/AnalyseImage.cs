@@ -77,11 +77,10 @@ namespace Functions.Functions
                                     bitmap.Save(outputStream, ImageFormat.Jpeg);
 
                                     outputStream.Position = 0;
+                                  
                                     await faceOutput.UploadFromStreamAsync(outputStream);
-
-                                    //faceOutput.UploadFromStream(outputStream);
-
-                                    await cloudTable.Update(name, faceOutput.Uri.AbsoluteUri, (image, text) => { image.FaceUri = text; });
+                                   
+                                    //await cloudTable.Update(name, faceOutput.Uri.AbsoluteUri, (image, text) => { image.FaceUri = text; });
                                 }
                             }
                             catch (Exception ex)
