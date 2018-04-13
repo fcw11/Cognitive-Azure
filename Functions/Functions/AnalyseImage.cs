@@ -80,7 +80,7 @@ namespace Functions.Functions
                                   
                                     await faceOutput.UploadFromStreamAsync(outputStream);
                                    
-                                    //await cloudTable.Update(name, faceOutput.Uri.AbsoluteUri, (image, text) => { image.FaceUri = text; });
+                                    await cloudTable.Update(name, faceOutput.Uri.AbsoluteUri, (image, text) => { image.FaceUri = text; });
                                 }
                             }
                             catch (Exception ex)
