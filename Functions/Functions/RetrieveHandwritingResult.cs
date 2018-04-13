@@ -42,9 +42,11 @@ namespace Functions.Functions
 
                 succeeded = result.Status == "Succeeded";
 
+                log.Info(succeeded);
+                
                 if (succeeded)
                 {
-                    await cloudTable.Update(handwritingRequest.Key, JSONHelper.ToJson(result.RecognitionResult), (image, text) =>
+                    await cloudTable.Update(handwritingRequest.Key, contentString, (image, text) =>
                     {
                         image.Handwriting = text;
                     });
