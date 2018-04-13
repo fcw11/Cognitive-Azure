@@ -42,7 +42,7 @@ namespace Functions.Functions
 
                 succeeded = result.Status == "Succeeded";
 
-                log.Info(succeeded);
+                log.Info(result.Status);
                 
                 if (succeeded)
                 {
