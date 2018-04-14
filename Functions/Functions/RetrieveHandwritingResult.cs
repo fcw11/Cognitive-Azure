@@ -22,7 +22,7 @@ namespace Functions.Functions
 
             var handwritingRequest = JSONHelper.FromJson<HandwritingRequest>(item);
 
-            var cogKey = ConfigurationManager.AppSettings["CognitiveService"];
+            var cogKey = ConfigurationManager.AppSettings["CognitiveVisionKey"];
 
             var client = new HttpClient();
 
