@@ -43,7 +43,7 @@ namespace Cognitive_Azure
                                                                "script-src \'self\' https://cognitive-azure.azurewebsites.net https://maxcdn.bootstrapcdn.com https://code.jquery.com/;" +
                                                                "style-src \'self\' \'unsafe-inline\' https://maxcdn.bootstrapcdn.com;" +
                                                                "font-src \'self\' https://maxcdn.bootstrapcdn.com;" +
-                                                               "img-src \'self\' https://cognitiveazure.blob.core.windows.net;" +
+                                                               "img-src \'self\' https://cognitiveservice.blob.core.windows.net;" +
                                                                "form-action \'self\';" +
                                                                "upgrade-insecure-requests;" +
                                                                "block-all-mixed-content;" +
