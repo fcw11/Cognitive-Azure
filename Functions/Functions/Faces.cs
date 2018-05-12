@@ -22,9 +22,9 @@ namespace Functions.Functions
             using (HttpContent content = new StreamContent(trigger))
             {
                 var parameters = "detect" +
-                                 "?returnFaceId=0" +
-                                 "&returnFaceLandmarks=1" +
-                                 "&returnFaceAttributes=age,gender,smile,facialHair,glasses,emotion,hair";
+                                 "?returnFaceId=true" +
+                                 "&returnFaceLandmarks=true" +
+                                 "&returnFaceAttributes=age,gender,smile,facialHair,headPose,glasses,emotion,hair,makeup,accessories,blur,exposure,noise";
 
                 var response = await CognitiveServicesHttpClient.PostFaceRequest(content, parameters);
 
