@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Handwriting;
+using Services.Implementation;
 
 namespace Functions.Functions
 {

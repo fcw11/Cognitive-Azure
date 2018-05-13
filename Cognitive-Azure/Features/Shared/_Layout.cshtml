@@ -32,35 +32,37 @@
                             <a class="nav-link" href="mailto:paul@pbreen.co.uk">Contact</a>
                         </li>
                         <li class="nav-item">
-                            <a  class="nav-link" asp-action="About" asp-controller="Home">About</a>
+                            <a class="nav-link" asp-action="About" asp-controller="Home">About</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    <div class="container main-container"> 
-        @RenderBody()
-    </div>
-    
-    <footer class="bd-footer text-muted">
-        <div class="container-fluid p-1 p-md-1 text-align-center">
-            <ul class="bd-footer-links">
-                <li><a href="//twitter.com/paulbreen" target="_blank">Twitter</a></li>
-                <li><a href="mailto:paul@pbreen.co.uk">Contact</a></li>
-                <li><a asp-action="About" asp-controller="Home">About</a></li>
-            </ul>
+        <div class="container main-container">
+            @RenderBody()
         </div>
-        <div class="container-fluid p-1 p-md-1 text-align-center">
-            <a href="//pbreen.co.uk" target="_blank">Paul Breen </a> &copy; @DateTime.UtcNow.Year
-        </div>
-    </footer>
-    <environment include="Development">
-        <script src="/lib/jquery/dist/jquery.js"></script>
-        <script src="/js/bootstrap.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </environment>
+
+        <footer class="bd-footer text-muted">
+            <div class="container-fluid p-1 p-md-1 text-align-center">
+                <ul class="bd-footer-links">
+                    <li><a href="//twitter.com/paulbreen" target="_blank">Twitter</a></li>
+                    <li><a href="mailto:paul@pbreen.co.uk">Contact</a></li>
+                    <li><a asp-action="About" asp-controller="Home">About</a></li>
+                </ul>
+            </div>
+            <div class="container-fluid p-1 p-md-1 text-align-center">
+                <a href="//pbreen.co.uk" target="_blank">Paul Breen </a> &copy; @DateTime.UtcNow.Year
+            </div>
+        </footer>
+        <environment include="Development">
+            <script src="/lib/jquery/dist/jquery.js"></script>
+            <script src="/js/bootstrap.js"></script>
+
+        </environment>
+        <environment exclude="Development">
+            <script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        </environment>
+        <script src="~/js/comments.js"></script>
     </body>
 </html>

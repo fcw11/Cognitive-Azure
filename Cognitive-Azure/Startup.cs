@@ -27,6 +27,7 @@ namespace Cognitive_Azure
 
 
             services.AddSingleton<ICloudStorageService, CloudStorageService>();
+            services.AddSingleton<ITextService, TextService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

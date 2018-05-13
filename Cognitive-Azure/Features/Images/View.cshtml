@@ -60,7 +60,10 @@
         <div role="tabpanel" class="col-md-12">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#analyze" role="tab" aria-controls="analyze" aria-expanded="true">Analyse</a>
+                    <a class="nav-link active" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-expanded="true">Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#analyze" role="tab" aria-controls="analyze" aria-expanded="true">Analyse</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="faces-tab" data-toggle="tab" href="#faces" role="tab" aria-controls="faces" aria-expanded="true">Faces</a>
@@ -79,7 +82,13 @@
                 </li>
             </ul>
             <div class="tab-content tab-border" id="myTabContent">
-                <div class="tab-pane fade active show" id="analyze"  role="tabpanel" aria-labelledby="analyze-tab" aria-expanded="true">
+                <div class="tab-pane fade active show" id="comments"  role="tabpanel" aria-labelledby="comments-tab" aria-expanded="true">
+                    <pre>blah blah</pre>
+                    
+                    
+                    @Html.Partial("_AddComment")
+                </div>
+                <div class="tab-pane fade" id="analyze" role="tabpanel" aria-labelledby="analyze-tab" aria-expanded="true">
                     <pre>@Model.Analyse?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="faces" role="tabpanel" aria-labelledby="faces-tab" aria-expanded="false">

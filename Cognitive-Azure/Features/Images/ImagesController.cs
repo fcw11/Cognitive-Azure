@@ -9,9 +9,12 @@ namespace Cognitive_Azure.Features.Images
     {
         public ICloudStorageService CloudStorageService { get; set; }
 
-        public ImagesController(ICloudStorageService cloudStorageService)
+        public ITextService TextService { get; set; }
+
+        public ImagesController(ICloudStorageService cloudStorageService, ITextService textService)
         {
             CloudStorageService = cloudStorageService;
+            TextService = textService;
         }
 
         public IActionResult Index()
@@ -45,6 +48,18 @@ namespace Cognitive_Azure.Features.Images
             }
 
             return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public JsonResult AddComment(string comment)
+        {
+            if (ModelState.IsValid)
+            {
+                TextService.GetScore(comment);
+                return new JsonResult("good");
+            }
+
+            return new JsonResult("Bad");
         }
     }
 }

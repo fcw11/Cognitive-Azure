@@ -3,9 +3,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Funcs
+namespace Functions
 {
-    public class CognitiveServicesHttpClient
+    public class CognitiveServicesHttpClient : Services.Implementation.CognitiveServicesHttpClient
     {
         public static async Task<HttpResponseMessage> PostVisionRequest(HttpContent content, string parameters)
         {
@@ -14,6 +14,8 @@ namespace Funcs
             var visionUri = ConfigurationManager.AppSettings["CognitiveVisionUri"];
 
             var uri = visionUri + parameters;
+
+            content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
             return await HttpResponseMessage(content, uri, cogKey);
         }
@@ -26,19 +28,9 @@ namespace Funcs
 
             var uri = visionUri + parameters;
 
-            return await HttpResponseMessage(content, uri, cogKey);
-        }
-
-        private static async Task<HttpResponseMessage> HttpResponseMessage(HttpContent content, string uri, string cogKey)
-        {
             content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
-
-                return await client.PostAsync(uri, content);
-            }
+            return await HttpResponseMessage(content, uri, cogKey);
         }
     }
 }
