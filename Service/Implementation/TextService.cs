@@ -1,6 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Services.Entities.JSON;
+using Services.Entities.JSON.TextAnalytics;
 using Services.Interfaces;
 
 namespace Services.Implementation
@@ -15,7 +19,7 @@ namespace Services.Implementation
         }
 
 
-        public void GetScore(string text)
+        public async Task<double> GetScore(string text)
         {
             var url = Configuration["TextAnalyticsAPI"];
             var key = Configuration["TextAnalyticsKey"];
@@ -26,13 +30,19 @@ namespace Services.Implementation
 
             using (var content = new ByteArrayContent(byteData))
             {
-                var response = CognitiveServicesHttpClient.HttpResponseMessage(content, url, key).Result;
+                var response = await CognitiveServicesHttpClient.HttpResponseMessage(content, url, key);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBytes = response.Content.ReadAsStringAsync().Result;
+                    var responseBytes =  await response.Content.ReadAsStringAsync();
+
+                    var result = JSONHelper.FromJson<TextAnalytics>(responseBytes);
+
+                    return result.Documents[0].Score;
                 }
             }
+
+            return 0;
         }
     }
 }

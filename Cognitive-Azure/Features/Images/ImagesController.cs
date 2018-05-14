@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -51,15 +52,16 @@ namespace Cognitive_Azure.Features.Images
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public JsonResult AddComment(string comment)
+        public async Task<JsonResult> AddComment(string comment)
         {
             if (ModelState.IsValid)
             {
-                TextService.GetScore(comment);
-                return new JsonResult("good");
+                var score = await TextService.GetScore(comment);
+
+                return new JsonResult(new { score });
             }
 
-            return new JsonResult("Bad");
+            return new JsonResult("Invalid request");
         }
     }
 }

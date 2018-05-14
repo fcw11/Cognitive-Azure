@@ -1,7 +1,9 @@
-﻿namespace Services.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace Services.Interfaces
 {
     public interface ITextService
     {
-        void GetScore(string text);
+        Task<double> GetScore(string text);
     }
 }
