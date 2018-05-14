@@ -101,3 +101,12 @@
 .layout-margin-top {
     margin-top: 10px;
 }
+
+.comment {
+    min-height: 75px;
+    width: 30%;
+}
+
+.reaction {
+    vertical-align: inherit;
+}

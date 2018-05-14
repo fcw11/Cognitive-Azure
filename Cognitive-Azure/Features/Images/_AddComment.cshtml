@@ -3,7 +3,8 @@
     @Html.AntiForgeryToken()
     
     
-    @Html.TextArea("Comment")
+    @Html.TextArea("Comment", new {  @class = "comment"})
     
+    <img class="reaction" id="reaction" src="/img/emoji/Neutral.png" />
 
 </form>
