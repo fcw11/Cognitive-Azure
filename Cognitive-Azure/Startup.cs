@@ -45,6 +45,7 @@ namespace Cognitive_Azure
                                                                "style-src \'self\' \'unsafe-inline\' https://maxcdn.bootstrapcdn.com;" +
                                                                "font-src \'self\' https://maxcdn.bootstrapcdn.com;" +
                                                                "img-src \'self\' https://cognitiveservice.blob.core.windows.net;" +
+                                                               "connect-src \'self\';" +
                                                                "form-action \'self\';" +
                                                                "upgrade-insecure-requests;" +
                                                                "block-all-mixed-content;" +
@@ -55,14 +56,11 @@ namespace Cognitive_Azure
                    .AddCustomHeader("X-XSS-Protection", "1; mode=block")
                    .AddCustomHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains") //"; preload")
                    .AddCustomHeader("referrer-policy", "no-referrer-when-downgrade")
-                   .AddCustomHeader("Access-Control-Allow-Origin", "*")
+                   .AddCustomHeader("Access-Control-Allow-Origin", "https://report-uri.com/")
                    .RemoveCustomHeader("X-Powered-By")
                    .RemoveServerHeader()
                 );
                
-                
-
-
                 app.UseExceptionHandler("/Home/Error");
             }
 
