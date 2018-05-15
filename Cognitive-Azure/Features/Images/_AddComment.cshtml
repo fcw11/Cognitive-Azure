@@ -1,10 +1,13 @@
-﻿
-<form asp-controller="Images" asp-action="Upload" method="post" enctype="multipart/form-data">
+﻿@{
+    var id = this.ViewContext.RouteData.Values["id"];
+}
+
+<form asp-controller="Images" asp-action="AddComment" asp-route-id="@id" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
-    
     
     @Html.TextArea("Comment", new {  @class = "comment"})
     
     <img class="reaction" id="reaction" src="/img/emoji/Neutral.png" />
-
+    
+    <input type="submit" value="Upload" />
 </form>

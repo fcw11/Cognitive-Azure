@@ -3,7 +3,6 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
 using Services.Entities.JSON.Describe;
-using Services.Entities.JSON.Faces;
 using Services.Entities.JSON.Handwriting;
 using Services.Entities.JSON.OCR;
 using Services.Entities.JSON.Tags;

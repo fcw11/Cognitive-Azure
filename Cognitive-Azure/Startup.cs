@@ -25,8 +25,8 @@ namespace Cognitive_Azure
             services.AddMvc()
                     .AddFeatureFolders();
 
-
             services.AddSingleton<ICloudStorageService, CloudStorageService>();
+            services.AddSingleton<ICloudTableService, CloudTableService>();
             services.AddSingleton<ITextService, TextService>();
         }
 
@@ -54,7 +54,7 @@ namespace Cognitive_Azure
                    .AddCustomHeader("X-Content-Type-Options", "nosniff")
                    .AddCustomHeader("X-Frame-Options", "DENY")
                    .AddCustomHeader("X-XSS-Protection", "1; mode=block")
-                   .AddCustomHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains") //"; preload")
+                   .AddCustomHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
                    .AddCustomHeader("referrer-policy", "no-referrer-when-downgrade")
                    .AddCustomHeader("Access-Control-Allow-Origin", "https://report-uri.com/")
                    .RemoveCustomHeader("X-Powered-By")

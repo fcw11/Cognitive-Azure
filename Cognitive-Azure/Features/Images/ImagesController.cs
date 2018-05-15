@@ -10,24 +10,29 @@ namespace Cognitive_Azure.Features.Images
     {
         public ICloudStorageService CloudStorageService { get; set; }
 
+        public ICloudTableService CloudTableService { get; set; }
+
         public ITextService TextService { get; set; }
 
-        public ImagesController(ICloudStorageService cloudStorageService, ITextService textService)
+        public ImagesController(ICloudStorageService cloudStorageService, ICloudTableService cloudTableService, ITextService textService)
         {
             CloudStorageService = cloudStorageService;
+            CloudTableService = cloudTableService;
             TextService = textService;
         }
 
         public IActionResult Index()
         {
-            var items = CloudStorageService.RetrieveImages();
+            var items = CloudTableService.RetrieveImages();
 
             return View(items.ToList());
         }
 
-        public IActionResult View(Guid id)
+        public async Task<IActionResult> View(Guid id)
         {
-            var item = CloudStorageService.RetrieveImage(id);
+            var item = CloudTableService.RetrieveImage(id);
+
+            var comments = await CloudTableService.RetrieveComments(id);
 
             return View(item);
         }
@@ -52,7 +57,7 @@ namespace Cognitive_Azure.Features.Images
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddComment(string comment)
+        public async Task<JsonResult> AnalyseComment(string comment)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,20 @@ namespace Cognitive_Azure.Features.Images
             }
 
             return new JsonResult("Invalid request");
+        }
+
+        public async Task<IActionResult> AddComment(Guid id, string comment)
+        {
+            if (ModelState.IsValid)
+            {
+                var score = await TextService.GetScore(comment);
+
+                await CloudTableService.AddComment(id, comment, score);
+
+                return RedirectToAction("View", new { id });
+            }
+
+            return View();
         }
     }
 }
