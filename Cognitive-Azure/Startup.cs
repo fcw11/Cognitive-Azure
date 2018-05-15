@@ -55,10 +55,14 @@ namespace Cognitive_Azure
                    .AddCustomHeader("X-XSS-Protection", "1; mode=block")
                    .AddCustomHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains") //"; preload")
                    .AddCustomHeader("referrer-policy", "no-referrer-when-downgrade")
+                   .AddCustomHeader("Access-Control-Allow-Origin", "*")
                    .RemoveCustomHeader("X-Powered-By")
                    .RemoveServerHeader()
                 );
                
+                
+
+
                 app.UseExceptionHandler("/Home/Error");
             }
 
