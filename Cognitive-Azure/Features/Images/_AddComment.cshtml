@@ -1,13 +1,48 @@
-﻿@{
+﻿@using Services.Entities
+@model IQueryable<ImageComment>
+
+@{
     var id = this.ViewContext.RouteData.Values["id"];
 }
 
 <form asp-controller="Images" asp-action="AddComment" asp-route-id="@id" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
-    
-    @Html.TextArea("Comment", new {  @class = "comment"})
-    
-    <img class="reaction" id="reaction" src="/img/emoji/Neutral.png" />
-    
-    <input type="submit" value="Upload" />
+    <table class="comments">
+        <thead>
+            <tr>
+                <th>Comment</th>
+                <th class="scores">Score</th>
+                <th class="emoji"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <span>
+                        @Html.AntiForgeryToken()
+
+                        @Html.TextArea("Comment", new {@class = "comment"})
+                    </span>
+                    <span>
+                        <input type="submit" value="Add comment" />
+                    </span>
+
+                    
+                </td>
+                <td id="score">0</td>
+                <td><img class="reaction" id="reaction" src="/img/emoji/Neutral.png" /></td>
+            </tr>
+
+            @foreach (var comment in Model)
+            {
+                <tr>
+                    <td>@comment.Comment</td>
+                    <td>@comment.Score</td>
+                    <td><img src="@comment.Image" /></td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
 </form>

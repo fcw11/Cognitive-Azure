@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
@@ -69,5 +71,6 @@ namespace Services.Entities
         }
 
         public string FullImageUri => !string.IsNullOrEmpty(FaceUri) ? FaceUri : Uri;
+        public IQueryable<ImageComment> Comments { get; set; }
     }
 }

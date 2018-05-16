@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,18 +22,16 @@ namespace Cognitive_Azure.Features.Images
             TextService = textService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var items = CloudTableService.RetrieveImages();
+            var items = await CloudTableService.RetrieveImages();
 
             return View(items.ToList());
         }
 
         public async Task<IActionResult> View(Guid id)
         {
-            var item = CloudTableService.RetrieveImage(id);
-
-            var comments = await CloudTableService.RetrieveComments(id);
+            var item = await CloudTableService.RetrieveImage(id);
 
             return View(item);
         }
@@ -59,28 +58,26 @@ namespace Cognitive_Azure.Features.Images
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> AnalyseComment(string comment)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !string.IsNullOrEmpty(comment)) 
             {
                 var score = await TextService.GetScore(comment);
 
                 return new JsonResult(new { score });
             }
 
-            return new JsonResult("Invalid request");
+            return new JsonResult(new { score = 0 });
         }
 
         public async Task<IActionResult> AddComment(Guid id, string comment)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !string.IsNullOrEmpty(comment))
             {
                 var score = await TextService.GetScore(comment);
 
                 await CloudTableService.AddComment(id, comment, score);
-
-                return RedirectToAction("View", new { id });
             }
 
-            return View();
+            return RedirectToAction("View", new { id });
         }
     }
 }

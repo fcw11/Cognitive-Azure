@@ -10,11 +10,9 @@ namespace Services.Interfaces
     {
         Task AddComment(Guid id, string comment, double score);
 
-        Task<IQueryable<ImageComment>> RetrieveComments(Guid imageId);
+        Task<IQueryable<Image>> RetrieveImages();
 
-        IQueryable<Image> RetrieveImages();
-
-        Image RetrieveImage(Guid id);
+        Task<Image> RetrieveImage(Guid id);
 
         Task UploadImageInformationToTable(IFormFile file, Guid imageId, Uri blobUri);
 

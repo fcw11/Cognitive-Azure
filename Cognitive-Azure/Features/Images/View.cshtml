@@ -83,8 +83,7 @@
             </ul>
             <div class="tab-content tab-border" id="myTabContent">
                 <div class="tab-pane fade active show" id="comments"  role="tabpanel" aria-labelledby="comments-tab" aria-expanded="true">
-                    <pre>blah blah</pre>
-                    @Html.Partial("_AddComment")
+                    @Html.Partial("_AddComment", Model.Comments)
                 </div>
                 <div class="tab-pane fade" id="analyze" role="tabpanel" aria-labelledby="analyze-tab" aria-expanded="true">
                     <pre>@Model.Analyse?.PrettyPrintJson()</pre>

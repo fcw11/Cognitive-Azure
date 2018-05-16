@@ -62,19 +62,6 @@ namespace Services.Implementation
             await table.ExecuteAsync(insert);
         }
 
-        public async Task<IQueryable<ImageComment>> RetrieveComments(Guid imageId)
-        {
-            var commentTable = Configuration["CommentsTable"];
-
-            var table = CloudTableClient.GetTableReference(commentTable);
-
-            var query = new TableQuery<ImageComment>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, imageId.ToString()));
-
-            var result = await table.ExecuteQuerySegmentedAsync(query, null);
-
-            return result.Results.AsQueryable();
-        }
-
         public async Task UploadImageInformationToTable(IFormFile file, Guid imageId, Uri blobUri)
         {
             var imagesContainerName = Configuration["ImageContainerName"];
@@ -88,28 +75,46 @@ namespace Services.Implementation
             await table.ExecuteAsync(insertOperation);
         }
 
-        public IQueryable<Image> RetrieveImages()
+        public async Task<IQueryable<Image>> RetrieveImages()
         {
             var imagesContainerName = Configuration["ImageContainerName"];
 
             var table = CloudTableClient.GetTableReference(imagesContainerName);
 
             var tableQuery = new TableQuery<Image>();
-            var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
+
+            var tableQueryResult = await table.ExecuteQuerySegmentedAsync(tableQuery, null);
 
             return tableQueryResult.Results.AsQueryable();
         }
 
-        public Image RetrieveImage(Guid id)
+        public async Task<Image> RetrieveImage(Guid id)
         {
             var imagesContainerName = Configuration["ImageContainerName"];
 
             var table = CloudTableClient.GetTableReference(imagesContainerName);
 
             var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, id.ToString()));
-            var tableQueryResult = table.ExecuteQuerySegmentedAsync(tableQuery, null).Result;
+            var tableQueryResult = await table.ExecuteQuerySegmentedAsync(tableQuery, null);
 
-            return tableQueryResult.Results.Single();
+            var image = tableQueryResult.Results.Single();
+
+            image.Comments = await RetrieveComments(id);
+
+            return image;
+        }
+
+        private async Task<IQueryable<ImageComment>> RetrieveComments(Guid imageId)
+        {
+            var commentTable = Configuration["CommentsTable"];
+
+            var table = CloudTableClient.GetTableReference(commentTable);
+
+            var query = new TableQuery<ImageComment>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, imageId.ToString()));
+
+            var result = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            return result.Results.AsQueryable();
         }
     }
 }

@@ -92,6 +92,7 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .image_card {
@@ -104,9 +105,27 @@
 
 .comment {
     min-height: 75px;
-    width: 30%;
+    width: 100%; 
 }
 
 .reaction {
     vertical-align: inherit;
+}
+
+.comments {
+    width: 100%;
+}
+
+.comments th,td {
+    border: 1px;
+    border-style: dashed;
+    padding: 10px;
+}
+
+ .scores {
+     width: 10%;
+ }
+
+.emoji {
+    width: 10%;
 }
