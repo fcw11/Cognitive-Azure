@@ -17,5 +17,7 @@ namespace Services.Interfaces
         Image RetrieveImage(Guid id);
 
         Task UploadImageInformationToTable(IFormFile file, Guid imageId, Uri blobUri);
+
+        Task CreateTablesIfNotExist();
     }
 }

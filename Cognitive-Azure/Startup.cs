@@ -31,7 +31,7 @@ namespace Cognitive_Azure
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ICloudStorageService cloudService)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ICloudStorageService storageService, ICloudTableService tableService)
         {
             if (env.IsDevelopment())
             {
@@ -71,7 +71,8 @@ namespace Cognitive_Azure
                 routes.MapRoute("default", "{controller=Images}/{action=Index}/{id?}");
             });
 
-            cloudService.CreateContainersIfNotExist().Wait();
+            storageService.CreateContainersIfNotExist().Wait();
+            tableService.CreateTablesIfNotExist().Wait();
         }
     }
 }
