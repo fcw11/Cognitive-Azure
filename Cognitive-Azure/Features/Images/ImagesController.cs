@@ -62,10 +62,12 @@ namespace Cognitive_Azure.Features.Images
             {
                 var score = await TextService.GetScore(comment);
 
-                return new JsonResult(new { score });
+                var phrases = await TextService.GetKeyPhrases(comment);
+
+                return new JsonResult(new { score, phrases });
             }
 
-            return new JsonResult(new { score = 0 });
+            return new JsonResult(new { score = 0, phrases = string.Empty });
         }
 
         public async Task<IActionResult> AddComment(Guid id, string comment)
@@ -74,7 +76,9 @@ namespace Cognitive_Azure.Features.Images
             {
                 var score = await TextService.GetScore(comment);
 
-                await CloudTableService.AddComment(id, comment, score);
+                var phrase = await TextService.GetKeyPhrases(comment);
+
+                await CloudTableService.AddComment(id, comment, score, phrase);
             }
 
             return RedirectToAction("View", new { id });

@@ -29,6 +29,8 @@ namespace Services.Entities
             }
         }
 
+        public string Phrases { get; set; }
+
 
         public ImageComment()
         {

@@ -8,7 +8,7 @@ namespace Services.Interfaces
 {
     public interface ICloudTableService
     {
-        Task AddComment(Guid id, string comment, double score);
+        Task AddComment(Guid id, string comment, double score, string phrases);
 
         Task<IQueryable<Image>> RetrieveImages();
 

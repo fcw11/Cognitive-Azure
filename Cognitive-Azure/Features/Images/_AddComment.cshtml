@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th>Comment</th>
+                <th>Key Phrases</th>
                 <th class="scores">Score</th>
                 <th class="emoji"></th>
             </tr>
@@ -25,22 +26,21 @@
                     <span>
                         <input type="submit" value="Add comment" />
                     </span>
-
-                    
                 </td>
+                <td id="phrases"></td>
                 <td id="score">0</td>
                 <td><img class="reaction" id="reaction" src="/img/emoji/Neutral.png" /></td>
-            </tr>
+            <tr/>
 
-            @foreach (var comment in Model)
+             @foreach (var comment in Model)
             {
                 <tr>
                     <td>@comment.Comment</td>
+					<td>@comment.Phrases</td>					
                     <td>@comment.Score</td>
                     <td><img src="@comment.Image" /></td>
                 </tr>
             }
-
         </tbody>
 
     </table>

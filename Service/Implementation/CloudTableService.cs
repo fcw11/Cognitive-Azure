@@ -43,7 +43,7 @@ namespace Services.Implementation
             await imageCommentsTable.CreateIfNotExistsAsync();
         }
 
-        public async Task AddComment(Guid imageId, string comment, double score)
+        public async Task AddComment(Guid imageId, string comment, double score, string phrases)
         {
             var commentTable = Configuration["CommentsTable"];
 
@@ -54,6 +54,7 @@ namespace Services.Implementation
                 PartitionKey = imageId.ToString(),
                 Comment = comment,
                 ImageId = imageId,
+                Phrases = phrases,
                 Score = score
             };
 
@@ -95,6 +96,7 @@ namespace Services.Implementation
             var table = CloudTableClient.GetTableReference(imagesContainerName);
 
             var tableQuery = new TableQuery<Image>().Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, id.ToString()));
+
             var tableQueryResult = await table.ExecuteQuerySegmentedAsync(tableQuery, null);
 
             var image = tableQueryResult.Results.Single();
