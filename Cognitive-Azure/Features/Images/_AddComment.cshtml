@@ -21,7 +21,7 @@
                     <span>
                         @Html.AntiForgeryToken()
 
-                        @Html.TextArea("Comment", new {@class = "comment"})
+                        @Html.TextArea("Comment", new { @class = "comment" })
                     </span>
                     <span>
                         <input type="submit" value="Add comment" />
@@ -30,13 +30,13 @@
                 <td id="phrases"></td>
                 <td id="score">0</td>
                 <td><img class="reaction" id="reaction" src="/img/emoji/Neutral.png" /></td>
-            <tr/>
+            <tr />
 
-             @foreach (var comment in Model)
+            @foreach (var comment in Model)
             {
                 <tr>
                     <td>@comment.Comment</td>
-					<td>@comment.Phrases</td>					
+                    <td>@comment.Phrases</td>
                     <td>@comment.Score</td>
                     <td><img src="@comment.Image" /></td>
                 </tr>

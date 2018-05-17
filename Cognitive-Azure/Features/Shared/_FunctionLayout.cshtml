@@ -1,0 +1,25 @@
+﻿@{
+    Layout = @"/Features/Shared/_Layout.cshtml";
+
+    var action = this.ViewContext.ActionDescriptor.RouteValues["action"];
+
+    var controller = this.ViewContext.ActionDescriptor.RouteValues["controller"];
+}
+
+<ul class="nav nav-tabs layout-margin-top">
+    <li class="nav-item">
+        <a asp-controller="Images" asp-action="Index" class="nav-link @(String.CompareOrdinal(action, "Index") == 0  && string.CompareOrdinal(controller, "Images") == 0 ? "active" : string.Empty)">List</a>
+    </li>
+    <li class="nav-item">
+        <a asp-controller="Images" asp-action="Upload" class="nav-link @(string.CompareOrdinal(action, "Upload") == 0 && string.CompareOrdinal(controller, "Images") == 0  ? "active" : string.Empty)">Upload</a>
+    </li>
+    <li class="nav-item">
+        <a asp-controller="Audio" asp-action="Index" class="nav-link @(string.CompareOrdinal(action, "Index") == 0 && string.CompareOrdinal(controller, "Audio") == 0 ? "active" : string.Empty)">Speech</a>
+    </li>
+</ul>
+
+@RenderBody()
+
+@section Scripts{
+    @RenderSection("Scripts", false)
+}
