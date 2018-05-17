@@ -67,7 +67,7 @@ namespace Cognitive_Azure.Features.Images
                 return new JsonResult(new { score, phrases });
             }
 
-            return new JsonResult(new { score = 0, phrases = string.Empty });
+            return new JsonResult(new { score = 0, phrases = string.Empty, ModelState.Values });
         }
 
         public async Task<IActionResult> AddComment(Guid id, string comment)
