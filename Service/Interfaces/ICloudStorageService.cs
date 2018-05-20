@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Services.Interfaces
 {
@@ -7,6 +9,6 @@ namespace Services.Interfaces
     {
         Task CreateContainersIfNotExist();
 
-        void UploadImage(IFormFile file);
+        CloudBlob Upload(Stream entity, Guid id, string containerName);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -12,13 +13,9 @@ namespace Services.Implementation
     {
         public IConfiguration Configuration { get; set; }
 
+        private CloudBlobClient CloudBlobClient { get; }
+
         private ICloudTableService CloudTableService { get; }
-
-        private readonly string _imagesContainerName;
-        private readonly string _thumbnailsContainerName;
-        private readonly string _facesContainerName;
-
-        private readonly CloudStorageAccount _cloudStorageAccount;
         
         public CloudStorageService(IConfiguration configuration, ICloudTableService cloudTableService)
         {
@@ -26,72 +23,47 @@ namespace Services.Implementation
 
             CloudTableService = cloudTableService;
 
-            var cloudConnectionString   = Configuration["BlobConnectionString"];
+            var cloudConnectionString = Configuration["BlobConnectionString"];
 
-            _imagesContainerName = Configuration["ImageContainerName"];
+            var cloudStorageAccount = CloudStorageAccount.Parse(cloudConnectionString);
 
-            _thumbnailsContainerName = Configuration["ThumbnailsContainerName"];
-
-            _facesContainerName = Configuration["FacesContainerName"];
-
-            _cloudStorageAccount = CloudStorageAccount.Parse(cloudConnectionString);
+            CloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
         }
         
         public async Task CreateContainersIfNotExist()
-        {
-            var blobClient      = _cloudStorageAccount.CreateCloudBlobClient();
+        {          
+            var list = new List<string>
+            {
+                "ThumbnailsContainerName",
+                "FacesContainerName",
+                "ImagesContainerName"
+            };
 
-            var imagesContainer = blobClient.GetContainerReference(_imagesContainerName);
+            foreach (var configurationName in list)
+            {
+                var containerName = Configuration[configurationName];
 
-            await imagesContainer.CreateIfNotExistsAsync();
+                var container = CloudBlobClient.GetContainerReference(containerName);
 
-            var imagesContainerpermissions = await imagesContainer.GetPermissionsAsync();
+                await container.CreateIfNotExistsAsync();
 
-            imagesContainerpermissions.PublicAccess = BlobContainerPublicAccessType.Container;
+                var imagesContainerpermissions = await container.GetPermissionsAsync();
 
-            await imagesContainer.SetPermissionsAsync(imagesContainerpermissions);
+                imagesContainerpermissions.PublicAccess = BlobContainerPublicAccessType.Container;
 
-
-            var thumbnailsContainer = blobClient.GetContainerReference(_thumbnailsContainerName);
-
-            await thumbnailsContainer.CreateIfNotExistsAsync();
-
-            var thumbnailsContainerPermissions = await thumbnailsContainer.GetPermissionsAsync();
-
-            thumbnailsContainerPermissions.PublicAccess = BlobContainerPublicAccessType.Container;
-
-            await thumbnailsContainer.SetPermissionsAsync(thumbnailsContainerPermissions);
-
-
-            var facesContainer = blobClient.GetContainerReference(_facesContainerName);
-
-            await facesContainer.CreateIfNotExistsAsync();
-
-            var facesContainerPermissions = await facesContainer.GetPermissionsAsync();
-
-            facesContainerPermissions.PublicAccess = BlobContainerPublicAccessType.Container;
-
-            await facesContainer.SetPermissionsAsync(facesContainerPermissions);
+                await container.SetPermissionsAsync(imagesContainerpermissions);
+            }
         }
 
-        public async void UploadImage(IFormFile file)
+        public CloudBlob Upload(Stream stream, Guid id, string containerName)
         {
-            var imageName = Guid.NewGuid();
+            var blobContainer = CloudBlobClient.GetContainerReference(containerName);
 
-            await UploadImageToBlob(file, imageName);
-        }
-
-        private async Task UploadImageToBlob(IFormFile file, Guid imageName)
-        {
-            var blobClient     = _cloudStorageAccount.CreateCloudBlobClient();
-            var blobContainer  = blobClient.GetContainerReference(_imagesContainerName);
-
-            var blockBlob  = blobContainer.GetBlockBlobReference(imageName.ToString());
-            var stream     = file.OpenReadStream();
+            var blockBlob = blobContainer.GetBlockBlobReference(id.ToString());
 
             blockBlob.UploadFromStreamAsync(stream).Wait();
-
-            await CloudTableService.UploadImageInformationToTable(file, imageName, blockBlob.Uri);
+           
+            return blockBlob;
         }
     }
 }

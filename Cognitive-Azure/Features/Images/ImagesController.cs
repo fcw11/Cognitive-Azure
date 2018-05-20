@@ -8,29 +8,26 @@ namespace Cognitive_Azure.Features.Images
 {
     public class ImagesController : Controller
     {
-        public ICloudStorageService CloudStorageService { get; set; }
-
-        public ICloudTableService CloudTableService { get; set; }
+        public IImageService ImageService { get; set; }
 
         public ITextService TextService { get; set; }
 
-        public ImagesController(ICloudStorageService cloudStorageService, ICloudTableService cloudTableService, ITextService textService)
+        public ImagesController(IImageService imageService, ITextService textService)
         {
-            CloudStorageService = cloudStorageService;
-            CloudTableService = cloudTableService;
+            ImageService = imageService;
             TextService = textService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var items = await CloudTableService.RetrieveImages();
+            var items = await ImageService.RetrieveImages();
 
             return View(items.ToList());
         }
 
         public async Task<IActionResult> View(Guid id)
         {
-            var item = await CloudTableService.RetrieveImage(id);
+            var item = await ImageService.RetrieveImage(id);
 
             return View(item);
         }
@@ -46,7 +43,7 @@ namespace Cognitive_Azure.Features.Images
         {
             if (ModelState.IsValid)
             {
-                CloudStorageService.UploadImage(model.Image);
+                ImageService.UploadImage(model.Image);
 
                 return RedirectToAction("Index", "Images");
             }
@@ -77,7 +74,7 @@ namespace Cognitive_Azure.Features.Images
 
                 var phrase = await TextService.GetKeyPhrases(comment);
 
-                await CloudTableService.AddComment(id, comment, score, phrase);
+                await ImageService.AddComment(id, comment, score, phrase);
             }
 
             return RedirectToAction("View", new { id });

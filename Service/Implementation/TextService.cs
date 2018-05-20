@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -14,20 +13,22 @@ namespace Services.Implementation
     {
         public IConfiguration Configuration { get; set; }
 
-        public TextService(IConfiguration configuration)
+        public ICloudTableService CloudTableService { get; set; }
+
+        public TextService(IConfiguration configuration, ICloudTableService cloudTableService)
         {
             Configuration = configuration;
+            CloudTableService = cloudTableService;
         }
-
 
         public async Task<double> GetScore(string text)
         {
             var url = Configuration["TextAnalyticsAPI"] + "sentiment";
             var key = Configuration["TextAnalyticsKey"];
 
-            var something = $"{{ \"documents\": [ {{ \"language\": \"en\", \"id\": \"1\", \"text\": \"{text}\"}}]}}";
+            var payload = $"{{ \"documents\": [ {{ \"language\": \"en\", \"id\": \"1\", \"text\": \"{text}\"}}]}}";
 
-            var byteData = Encoding.UTF8.GetBytes(something);
+            var byteData = Encoding.UTF8.GetBytes(payload);
 
             using (var content = new ByteArrayContent(byteData))
             {
