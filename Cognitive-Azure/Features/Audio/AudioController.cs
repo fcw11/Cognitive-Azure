@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Entities.Audio;
 using Services.Interfaces;
@@ -27,14 +28,35 @@ namespace Cognitive_Azure.Features.Audio
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateProfile(CreateProfile profile)
+        public async Task<ActionResult> CreateProfile(CreateProfile model)
         {
             if (ModelState.IsValid)
             {
-                await AudioService.CreateProfile(profile);
+               var profileId = await AudioService.CreateProfile(model);
+
+                return RedirectToAction("EnrollProfile", new { id = profileId });
             }
 
-            return View(profile);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult EnrollProfile(Guid id)
+        {
+            var model = new EnrollProfile { Id = id };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnrollProfile(EnrollProfile model)
+        {
+            if (ModelState.IsValid)
+            {
+                await AudioService.EnrollProfile(model);
+            }
+            
+
+            return View(model);
         }
     }
 }

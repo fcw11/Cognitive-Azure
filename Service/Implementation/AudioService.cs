@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,10 @@ namespace Services.Implementation
             CloudTableService = cloudTableService;
         }
 
-        public async Task CreateProfile(CreateProfile profile)
+        public async Task<Guid> CreateProfile(CreateProfile profile)
         {
             var url = Configuration["AudioAnalyticsAPI"] + "identificationProfiles";
+
             var key = Configuration["AudioAnalyticsKey"];
 
             var tableName = Configuration["AudioProfileTable"];
@@ -45,9 +47,52 @@ namespace Services.Implementation
 
                     profile.Id = Guid.Parse(result.IdentificationProfileId);
 
+                    profile.RowKey = profile.Id.ToString();
+
+                    profile.PartitionKey = profile.Id.ToString();
+
                     await CloudTableService.Insert(profile, tableName);
+
+                    return profile.Id;
                 }
             }
+
+            throw new Exception("Error creating profile");
+        }
+
+        public  async Task EnrollProfile(EnrollProfile model)
+        {
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ model.Id }/enroll?shortAudio=true";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var a = Convert.FromBase64String(model.Audio);
+
+            var str = System.Text.Encoding.Default.GetString(a);
+
+         //   var file1 = File.Open(@"D:\Cognitive-Azure\Service\Implementation\test.wav", FileMode.Open);
+
+            using (var stream = GenerateStreamFromString(str))
+            {
+                var response = await CognitiveServicesHttpClient.HttpResponseMessage(stream, url, key);
+
+                var responseBytes = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
+                }
+            }
+        }
+
+        public static Stream GenerateStreamFromString(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 }

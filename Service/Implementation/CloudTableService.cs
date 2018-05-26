@@ -51,7 +51,14 @@ namespace Services.Implementation
 
             var insertOperation = TableOperation.Insert(entity);
 
-            return await table.ExecuteAsync(insertOperation);
+            try
+            {
+                return await table.ExecuteAsync(insertOperation);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IQueryable<T>> Retrieve<T>(string tableName) where T : ITableEntity, new()

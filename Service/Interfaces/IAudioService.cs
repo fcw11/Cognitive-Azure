@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Services.Entities.Audio;
 
 namespace Services.Interfaces
 {
     public interface IAudioService
     {
-        Task CreateProfile(CreateProfile profile);
+        Task<Guid> CreateProfile(CreateProfile profile);
+        Task EnrollProfile(EnrollProfile model);
     }
 }
