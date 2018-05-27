@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Services.Entities.Audio;
 using Services.Interfaces;
 
@@ -60,6 +61,14 @@ namespace Cognitive_Azure.Features.Audio
             
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CheckEnrollmentStatus(Guid id)
+        {
+            var result = await AudioService.CheckEnrollmentStatus(id);
+
+            return new JsonResult(result);
         }
     }
 }

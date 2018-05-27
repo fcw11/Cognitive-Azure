@@ -17,6 +17,16 @@ namespace Services.Implementation
             }
         }
 
+        public static async Task<HttpResponseMessage> HttpResponseMessage(string uri, string cogKey)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cogKey);
+
+                return await client.GetAsync(uri);
+            }
+        }
+
         public static async Task<HttpResponseMessage> HttpResponseMessage(Stream audioStream, string uri, string cogKey)
         {
             using (var client = new HttpClient())

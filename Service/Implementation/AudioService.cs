@@ -38,9 +38,11 @@ namespace Services.Implementation
             {
                 var response = await CognitiveServicesHttpClient.HttpResponseMessage(content, url, key);
 
+                var responseBytes = await response.Content.ReadAsStringAsync();
+
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBytes = await response.Content.ReadAsStringAsync();
+                   
 
                     var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
 
@@ -54,14 +56,14 @@ namespace Services.Implementation
 
                     return profile.Id;
                 }
-            }
 
-            throw new Exception("Error creating profile");
+                throw new Exception($"Failed request : { responseBytes } ");
+            }
         }
 
         public  async Task EnrollProfile(EnrollProfile model)
         {
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ model.Id }/enroll?shortAudio=true";
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ model.Id }/enroll";
 
             var key = Configuration["AudioAnalyticsKey"];
 
@@ -75,7 +77,29 @@ namespace Services.Implementation
                 {
                     var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
                 }
+
+                throw new Exception($"Failed request : { responseBytes } ");
             }
+        }
+
+        public async Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id)
+        {
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ id }";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var response = await CognitiveServicesHttpClient.HttpResponseMessage(url, key);
+
+            var responseBytes = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JSONHelper.FromJson<EnrollmentStatus>(responseBytes);
+
+                return result;
+            }
+
+            throw new Exception($"Failed request : { responseBytes } ");
         }
     }
 }

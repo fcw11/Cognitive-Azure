@@ -129,3 +129,15 @@
 .emoji {
     width: 10%;
 }
+
+#status {
+    outline: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px;
+}
+
+#status .string { color: green; }
+#status  .number { color: darkorange; }
+#status .boolean { color: blue; }
+#status .null { color: magenta; }
+#status .key { color: red; padding-left: 25px; }
