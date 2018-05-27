@@ -21,17 +21,30 @@
     var worker = new Worker('/js/EncoderWorker.js');
 
     worker.onmessage = function (event) {
-        var url = URL.createObjectURL(event.data.blob);
-        $("#audioSource").attr("src", url);
-        $("#audioControls").load();
+        var form = new FormData();
 
-        var reader = new FileReader();
-        reader.readAsDataURL(event.data.blob);
+        form.append("__RequestVerificationToken", $("input[name='__RequestVerificationToken']").val());
+        form.append("id", $("#Id").val());
+        form.append("Audio", event.data.blob);
 
-        var a = reader.result.split(',')[1];
-        console.log(reader.result);
+        var request = new XMLHttpRequest();
+        var async = true;
+        request.open("POST", "/Audio/EnrollProfile/44d9e727-4142-4f9a-8845-92764956afe3", async);
+        if (async) {
+            request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    var response = null;
+                    try {
+                        response = JSON.parse(request.responseText);
+                    } catch (e) {
+                        response = request.responseText;
+                    }
 
-        $("#Audio").val(a);
+                    console.log(response);
+                }
+            }
+        }
+        request.send(form);
     };
 
     function getBuffers(event) {
@@ -49,7 +62,7 @@
         worker.postMessage({
             command: 'start',
             process: 'separate',
-            sampleRate: 16000,//audioContext.sampleRate,
+            sampleRate: audioContext.sampleRate,
             numChannels: 1
         });
 

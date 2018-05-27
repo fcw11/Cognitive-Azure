@@ -52,6 +52,9 @@ namespace Cognitive_Azure.Features.Audio
         {
             if (ModelState.IsValid)
             {
+                var audio = Request.Form.Files["audio"];
+                model.Audio = audio;
+
                 await AudioService.EnrollProfile(model);
             }
             

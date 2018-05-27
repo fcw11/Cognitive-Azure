@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,13 +65,7 @@ namespace Services.Implementation
 
             var key = Configuration["AudioAnalyticsKey"];
 
-            var a = Convert.FromBase64String(model.Audio);
-
-            var str = System.Text.Encoding.Default.GetString(a);
-
-         //   var file1 = File.Open(@"D:\Cognitive-Azure\Service\Implementation\test.wav", FileMode.Open);
-
-            using (var stream = GenerateStreamFromString(str))
+            using (var stream = model.Audio.OpenReadStream())
             {
                 var response = await CognitiveServicesHttpClient.HttpResponseMessage(stream, url, key);
 
@@ -83,16 +76,6 @@ namespace Services.Implementation
                     var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
                 }
             }
-        }
-
-        public static Stream GenerateStreamFromString(string s)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
         }
     }
 }

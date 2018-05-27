@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Services.Entities.Audio
 {
@@ -6,6 +7,6 @@ namespace Services.Entities.Audio
     {
         public Guid Id { get; set; }
 
-        public string Audio { get; set; }
+        public IFormFile Audio { get; set; }
     }
 }
