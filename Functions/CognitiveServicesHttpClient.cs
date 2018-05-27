@@ -17,7 +17,7 @@ namespace Functions
 
             content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
-            return await HttpResponseMessage(content, uri, cogKey);
+            return await HttpPost(content, uri, cogKey);
         }
 
         public static async Task<HttpResponseMessage> PostFaceRequest(HttpContent content, string parameters)
@@ -30,7 +30,7 @@ namespace Functions
 
             content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/octet-stream");
 
-            return await HttpResponseMessage(content, uri, cogKey);
+            return await HttpPost(content, uri, cogKey);
         }
     }
 }

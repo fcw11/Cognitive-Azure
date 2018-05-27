@@ -36,7 +36,7 @@ namespace Services.Implementation
 
             using (var content = new ByteArrayContent(byteData))
             {
-                var response = await CognitiveServicesHttpClient.HttpResponseMessage(content, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPost(content, url, key);
 
                 var responseBytes = await response.Content.ReadAsStringAsync();
 
@@ -69,7 +69,7 @@ namespace Services.Implementation
 
             using (var stream = model.Audio.OpenReadStream())
             {
-                var response = await CognitiveServicesHttpClient.HttpResponseMessage(stream, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
 
                 var responseBytes = await response.Content.ReadAsStringAsync();
 
@@ -88,7 +88,7 @@ namespace Services.Implementation
 
             var key = Configuration["AudioAnalyticsKey"];
 
-            var response = await CognitiveServicesHttpClient.HttpResponseMessage(url, key);
+            var response = await CognitiveServicesHttpClient.HttpGet(url, key);
 
             var responseBytes = await response.Content.ReadAsStringAsync();
 
@@ -100,6 +100,41 @@ namespace Services.Implementation
             }
 
             throw new Exception($"Failed request : { responseBytes } ");
+        }
+
+        public async Task<EnrollmentStatus[]> GetProfiles()
+        {
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var response = await CognitiveServicesHttpClient.HttpGet(url, key);
+
+            var responseBytes = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JSONHelper.FromJson<EnrollmentStatus[]>(responseBytes);
+
+                return result;
+            }
+
+            throw new Exception($"Failed request : { responseBytes } ");
+        }
+
+        public async Task DeleteProfiles()
+        {
+            var profiles = await GetProfiles();
+
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            foreach (var profile in profiles)
+            {
+                var profileUrl = url + profile.IdentificationProfileId;
+                await CognitiveServicesHttpClient.HttpDelete(profileUrl, key);
+            }
         }
     }
 }

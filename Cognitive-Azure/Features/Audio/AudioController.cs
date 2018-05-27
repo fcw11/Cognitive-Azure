@@ -70,5 +70,21 @@ namespace Cognitive_Azure.Features.Audio
 
             return new JsonResult(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> IdentifySpeaker()
+        {
+            await AudioService.GetProfiles();
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteSpeakers()
+        {
+            await AudioService.DeleteProfiles();
+
+            return View();
+        }
     }
 }

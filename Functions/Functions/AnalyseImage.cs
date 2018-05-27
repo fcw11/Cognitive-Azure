@@ -12,7 +12,6 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Analyse;
-using Services.Implementation;
 
 namespace Functions.Functions
 {

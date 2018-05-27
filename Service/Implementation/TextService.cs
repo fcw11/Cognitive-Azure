@@ -32,7 +32,7 @@ namespace Services.Implementation
 
             using (var content = new ByteArrayContent(byteData))
             {
-                var response = await CognitiveServicesHttpClient.HttpResponseMessage(content, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPost(content, url, key);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -58,7 +58,7 @@ namespace Services.Implementation
 
             using (var content = new ByteArrayContent(byteData))
             {
-                var response = await CognitiveServicesHttpClient.HttpResponseMessage(content, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPost(content, url, key);
 
                 if (response.IsSuccessStatusCode)
                 {

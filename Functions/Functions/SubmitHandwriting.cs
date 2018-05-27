@@ -2,12 +2,10 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Funcs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Handwriting;
-using Services.Implementation;
 
 namespace Functions.Functions
 {

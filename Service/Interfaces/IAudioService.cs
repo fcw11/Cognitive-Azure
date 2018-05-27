@@ -9,5 +9,7 @@ namespace Services.Interfaces
         Task<Guid> CreateProfile(CreateProfile profile);
         Task EnrollProfile(EnrollProfile model);
         Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id);
+        Task<EnrollmentStatus[]> GetProfiles();
+        Task DeleteProfiles();
     }
 }
