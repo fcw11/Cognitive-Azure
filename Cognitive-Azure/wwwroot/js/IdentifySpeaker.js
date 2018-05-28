@@ -5,13 +5,11 @@ var worker = new Worker('/js/EncoderWorker.js');
 
 worker.onmessage = function (event) {
     var form = new FormData();
-    var id = $("#Id").val();
     form.append("__RequestVerificationToken", $("input[name='__RequestVerificationToken']").val());
-    form.append("id", id);
     form.append("Audio", event.data.blob);
 
     var request = new XMLHttpRequest();
-    request.open("POST", "/Audio/EnrollProfile/" + id, true);
+    request.open("POST", "/Audio/IdentifySpeaker", true);
 
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
@@ -22,6 +20,7 @@ worker.onmessage = function (event) {
                 response = request.responseText;
             }
 
+            setTimeout(pollIdentificationProcess(response), checkEnrollmentInterval);
             console.log(response);
         }
     }
@@ -29,33 +28,27 @@ worker.onmessage = function (event) {
 };
 
 $(function () {
-    $("#startRecording").click(function(e) {
+    $("#startRecording").click(function (e) {
         e.preventDefault();
         startRecording();
     });
 
-    $("#stopRecording").click(function(e) {
+    $("#stopRecording").click(function (e) {
         e.preventDefault();
         stopRecordingProcess(true);
     });
-
-    setTimeout(checkEnrollment, 1000);
 });
 
-
-function checkEnrollment() {
-    var id = $("#Id").val();
-
-    var url = "/Audio/CheckEnrollmentStatus/" + id;
-
+function pollIdentificationProcess(url) {
     $.ajax({
         dataType: "json",
-        url: url,
-        success: updateEnrollmentStatus
+        data: { url: url },
+        url: "/Audio/PollIdentifySpeaker",
+        success: updateResult
     });
 }
 
-function updateEnrollmentStatus(data) {
+function updateResult(data) {
 
     var prettifiedResponse = syntaxHighlight(data);
 
@@ -63,11 +56,11 @@ function updateEnrollmentStatus(data) {
 
     $("#status").html(prettifiedResponse);
 
-    if (data.enrollmentStatus !== "Enrolled") {
-        setTimeout(checkEnrollment, checkEnrollmentInterval);
-    } else {
-        stopRecordingProcess(true);
-    }
+    //if (data.enrollmentStatus !== "Enrolled") {
+    //    setTimeout(checkEnrollment, checkEnrollmentInterval);
+    //} else {
+    //    stopRecordingProcess(true);
+    //}
 }
 
 function syntaxHighlight(json) {
@@ -87,7 +80,7 @@ function syntaxHighlight(json) {
             cls = 'boolean';
         } else if (/null/.test(match)) {
             cls = 'null';
-        } 
+        }
         return '<span class="' + cls + '">' + match + '</span>';
     });
 }

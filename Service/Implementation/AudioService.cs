@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +24,7 @@ namespace Services.Implementation
             CloudTableService = cloudTableService;
         }
 
-        public async Task<Guid> CreateProfile(CreateProfile profile)
+        public async Task<Guid> CreateProfile(AudioProfile profile)
         {
             var url = Configuration["AudioAnalyticsAPI"] + "identificationProfiles";
 
@@ -67,6 +69,8 @@ namespace Services.Implementation
 
             var key = Configuration["AudioAnalyticsKey"];
 
+            //var file = File.Open(@"D:\Cognitive-Azure\Service\Implementation\Barack_Obama-Inaugural_Address-test1.wav", FileMode.Open);
+
             using (var stream = model.Audio.OpenReadStream())
             {
                 var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
@@ -102,7 +106,7 @@ namespace Services.Implementation
             throw new Exception($"Failed request : { responseBytes } ");
         }
 
-        public async Task<EnrollmentStatus[]> GetProfiles()
+        public async Task<IQueryable<AudioProfile>> GetProfiles()
         {
             var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles";
 
@@ -114,9 +118,20 @@ namespace Services.Implementation
 
             if (response.IsSuccessStatusCode)
             {
-                var result = JSONHelper.FromJson<EnrollmentStatus[]>(responseBytes);
+                var enrollments = JSONHelper.FromJson<EnrollmentStatus[]>(responseBytes);
 
-                return result;
+                var table = Configuration["AudioProfileTable"];
+
+                var audioProfiles = await CloudTableService.Retrieve<AudioProfile>(table);
+
+                foreach (var enrollment in enrollments)
+                {
+                    var profile = audioProfiles.SingleOrDefault(x => x.Id.ToString() == enrollment.IdentificationProfileId);
+                    
+                    if (profile != null) profile.EnrollmentStatus = enrollment;
+                }
+
+                return audioProfiles;
             }
 
             throw new Exception($"Failed request : { responseBytes } ");
@@ -132,9 +147,45 @@ namespace Services.Implementation
 
             foreach (var profile in profiles)
             {
-                var profileUrl = url + profile.IdentificationProfileId;
+                var profileUrl = url + profile.Id;
                 await CognitiveServicesHttpClient.HttpDelete(profileUrl, key);
             }
+        }
+
+        public async Task<string> IdentifySpeaker(IdentifyProfile model)
+        {
+            var profiles = await GetProfiles();
+
+            var identificationProfileIds = string.Join(",", profiles.Where(x => x.EnrollmentStatus != null &&  x.EnrollmentStatus.EnrollmentStatusEnrollmentStatus == "Enrolled" ).Select(x => x.Id));
+
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }identify?identificationProfileIds={ identificationProfileIds }";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            //var file = File.Open(@"D:\Cognitive-Azure\Service\Implementation\Barack_Obama-Inaugural_Address-test1.wav", FileMode.Open);
+
+            using (var stream = model.Audio.OpenReadStream())
+            {
+                var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
+
+                var responseBytes = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                   return response.Headers.GetValues("Operation-Location").FirstOrDefault();
+                }
+
+                throw new Exception($"Failed request : { responseBytes } ");
+            }
+        }
+
+        public async Task<string> PollIdentifySpeaker(string url)
+        {
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var response = await CognitiveServicesHttpClient.HttpGet(url, key);
+
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

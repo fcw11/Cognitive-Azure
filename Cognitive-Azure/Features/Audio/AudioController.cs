@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -24,12 +25,12 @@ namespace Cognitive_Azure.Features.Audio
         [HttpGet]
         public IActionResult CreateProfile()
         {
-            var model = new CreateProfile();
+            var model = new AudioProfile();
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateProfile(CreateProfile model)
+        public async Task<ActionResult> CreateProfile(AudioProfile model)
         {
             if (ModelState.IsValid)
             {
@@ -53,12 +54,8 @@ namespace Cognitive_Azure.Features.Audio
         {
             if (ModelState.IsValid)
             {
-                var audio = Request.Form.Files["audio"];
-                model.Audio = audio;
-
                 await AudioService.EnrollProfile(model);
             }
-            
 
             return View(model);
         }
@@ -74,9 +71,37 @@ namespace Cognitive_Azure.Features.Audio
         [HttpGet]
         public async Task<IActionResult> IdentifySpeaker()
         {
-            await AudioService.GetProfiles();
+            var profiles = await AudioService.GetProfiles();
 
-            return View();
+            profiles = profiles.Where(x => x.EnrollmentStatus != null && x.EnrollmentStatus.EnrollmentStatusEnrollmentStatus == "Enrolled");
+
+            return View(profiles);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> IdentifySpeaker(IdentifyProfile model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await AudioService.IdentifySpeaker(model);
+
+                return new JsonResult(result);
+            }
+
+            return new JsonResult(string.Empty);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> PollIdentifySpeaker(string url)
+        {
+            if (ModelState.IsValid)
+            {
+               var result = await AudioService.PollIdentifySpeaker(url);
+
+                return new JsonResult(result);
+            }
+
+            return new JsonResult(string.Empty);
         }
 
         [HttpGet]

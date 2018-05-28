@@ -17,34 +17,7 @@ microphoneLevel.gain.value = 0.5;
 microphoneLevel.connect(mixer);
 mixer.connect(input);
 
-var worker = new Worker('/js/EncoderWorker.js');
 
-worker.onmessage = function (event) {
-    var form = new FormData();
-    debugger;
-    var id = $("#Id").val();
-    form.append("__RequestVerificationToken", $("input[name='__RequestVerificationToken']").val());
-    form.append("id", id);
-    form.append("Audio", event.data.blob);
-
-    var request = new XMLHttpRequest();
-    request.open("POST", "/Audio/EnrollProfile/" + id, true);
-        
-    request.onreadystatechange = function () {
-        if (request.readyState == 4 && request.status == 200) {
-            var response = null;
-            try {
-                response = JSON.parse(request.responseText);
-            } catch (e) {
-                response = request.responseText;
-            }
-
-            console.log(response);
-        }
-    }
-    debugger;
-    request.send(form);
-};
 
 function getBuffers(event) {
     var buffers = [];

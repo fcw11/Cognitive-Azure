@@ -7,10 +7,10 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Services.Entities.Audio
 {
-    public class CreateProfile : TableEntity, IValidatableObject
+    public class AudioProfile : TableEntity, IValidatableObject
     {
 
-        public CreateProfile()
+        public AudioProfile()
         {
             Locale = new[]
             {
@@ -29,7 +29,10 @@ namespace Services.Entities.Audio
         [Required]
         public string SelectedLocale { set; get; }
 
+        public EnrollmentStatus EnrollmentStatus { get; set; }
+
         public IEnumerable<SelectListItem> Locale { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (!string.IsNullOrEmpty(SelectedLocale))
