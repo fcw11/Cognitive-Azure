@@ -1,12 +1,10 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Funcs.Model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
-using Services.Implementation;
 
 namespace Functions.Functions
 {
@@ -14,39 +12,55 @@ namespace Functions.Functions
     {
         [FunctionName("CleanDown")]
         public static async Task Run(
-            [TimerTrigger("0 0 1 * * *")]TimerInfo myTimer, 
-            [Table("images")] CloudTable cloudTable, 
+            [TimerTrigger("0 0 22 * * *")]TimerInfo myTimer, 
+            [Table("Images")] CloudTable imageTable,
+            [Table("ImageComments")] CloudTable imageCommentTable,
+            [Table("AudioProfiles")] CloudTable audioProfilesTable,
             [Blob("images", FileAccess.Read)] CloudBlobContainer imagesContainer,
             [Blob("thumbnails", FileAccess.Read)] CloudBlobContainer thumbnailsContainer,
             [Blob("faces", FileAccess.Read)] CloudBlobContainer facesContainer,
             TraceWriter log)
         {
-            var entities = cloudTable.ExecuteQuery(new TableQuery<Image>()).ToList();
+            var imageTableEntities = imageTable.ExecuteQuery(new TableQuery()).ToList();
 
-            foreach (var entity in entities)
+            foreach (var entity in imageTableEntities)
             {
-                await cloudTable.ExecuteAsync(TableOperation.Delete(entity));
+                await imageTable.ExecuteAsync(TableOperation.Delete(entity));
             }
 
-            var images = imagesContainer.ListBlobs(string.Empty, true);
+            var imageCommentTableEntities = imageCommentTable.ExecuteQuery(new TableQuery()).ToList();
 
-            foreach (CloudBlockBlob item in images)
+            foreach (var entity in imageCommentTableEntities)
             {
-                await item.DeleteAsync();
+                await imageCommentTable.ExecuteAsync(TableOperation.Delete(entity));
             }
 
-            var thumbnails = thumbnailsContainer.ListBlobs(string.Empty, true);
+            var audioProfileTableEntities = audioProfilesTable.ExecuteQuery(new TableQuery()).ToList();
 
-            foreach (CloudBlockBlob item in thumbnails)
+            foreach (var entity in audioProfileTableEntities)
             {
-                await item.DeleteAsync();
+                await audioProfilesTable.ExecuteAsync(TableOperation.Delete(entity));
             }
 
-            var faces = facesContainer.ListBlobs(string.Empty, true);
+            var imageBlobEntities = imagesContainer.ListBlobs(string.Empty, true);
 
-            foreach (CloudBlockBlob item in faces)
+            foreach (CloudBlockBlob entity in imageBlobEntities)
             {
-                await item.DeleteAsync();
+                await entity.DeleteAsync();
+            }
+
+            var thumbnailBlobEntities = thumbnailsContainer.ListBlobs(string.Empty, true);
+
+            foreach (CloudBlockBlob entity in thumbnailBlobEntities)
+            {
+                await entity.DeleteAsync();
+            }
+
+            var faceBlobEntities = facesContainer.ListBlobs(string.Empty, true);
+
+            foreach (CloudBlockBlob entity in faceBlobEntities)
+            {
+                await entity.DeleteAsync();
             }
         }
     }
