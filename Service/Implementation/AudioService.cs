@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -44,8 +43,6 @@ namespace Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                   
-
                     var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
 
                     profile.Id = Guid.Parse(result.IdentificationProfileId);
@@ -68,8 +65,6 @@ namespace Services.Implementation
             var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ model.Id }/enroll";
 
             var key = Configuration["AudioAnalyticsKey"];
-
-            //var file = File.Open(@"D:\Cognitive-Azure\Service\Implementation\Barack_Obama-Inaugural_Address-test1.wav", FileMode.Open);
 
             using (var stream = model.Audio.OpenReadStream())
             {
@@ -161,8 +156,6 @@ namespace Services.Implementation
             var url = $"{ Configuration["AudioAnalyticsAPI"] }identify?identificationProfileIds={ identificationProfileIds }";
 
             var key = Configuration["AudioAnalyticsKey"];
-
-            //var file = File.Open(@"D:\Cognitive-Azure\Service\Implementation\Barack_Obama-Inaugural_Address-test1.wav", FileMode.Open);
 
             using (var stream = model.Audio.OpenReadStream())
             {

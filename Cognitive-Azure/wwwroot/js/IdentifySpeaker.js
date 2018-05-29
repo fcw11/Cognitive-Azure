@@ -3,6 +3,8 @@ var checkEnrollmentInterval = 10000;
 
 var worker = new Worker('/js/EncoderWorker.js');
 
+var pollingUrl;
+
 worker.onmessage = function (event) {
     var form = new FormData();
     form.append("__RequestVerificationToken", $("input[name='__RequestVerificationToken']").val());
@@ -20,7 +22,8 @@ worker.onmessage = function (event) {
                 response = request.responseText;
             }
 
-            setTimeout(pollIdentificationProcess(response), checkEnrollmentInterval);
+            pollingUrl = response;
+            setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
             console.log(response);
         }
     }
@@ -39,10 +42,10 @@ $(function () {
     });
 });
 
-function pollIdentificationProcess(url) {
+function pollIdentificationProcess() {
     $.ajax({
         dataType: "json",
-        data: { url: url },
+        data: { url: pollingUrl },
         url: "/Audio/PollIdentifySpeaker",
         success: updateResult
     });
@@ -56,6 +59,9 @@ function updateResult(data) {
 
     $("#status").html(prettifiedResponse);
 
+    if (data.status == "") {
+        setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
+    }
     //if (data.enrollmentStatus !== "Enrolled") {
     //    setTimeout(checkEnrollment, checkEnrollmentInterval);
     //} else {

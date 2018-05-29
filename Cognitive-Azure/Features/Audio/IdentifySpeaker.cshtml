@@ -18,24 +18,20 @@
 
 <table>
     <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
     @foreach (var profile in Model)
     {
-        <tr>
-            <td>@profile.Id</td>
+        <tr id="@profile.Id">
             <td>@profile.Name</td>
             <td></td>
         </tr>
     }
-
     </tbody>
-
 </table>
 
 <div class="col-12" id="status"></div>
