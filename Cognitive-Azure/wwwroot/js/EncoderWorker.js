@@ -7,7 +7,7 @@ self.onmessage = function (event) {
     var data = event.data;
     switch (data.command) {
         case 'start':
-            encoder = new WavAudioEncoder(16000, data.numChannels);
+            encoder = new WavAudioEncoder(data.sampleRate, data.numChannels);
             buffers = data.process === 'separate' ? [] : undefined;
             break;
         case 'record':

@@ -1,7 +1,7 @@
 ﻿@using Services.Entities.Audio
 @model AudioProfile
 
-<form asp-controller="Audio" asp-action="CreateProfile" method="post" enctype="multipart/form-data">
+<form asp-controller="AudioIdentification" asp-action="CreateProfile" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     @Html.EditorFor(x => x.Name)

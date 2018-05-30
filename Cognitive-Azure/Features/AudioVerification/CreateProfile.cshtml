@@ -1,0 +1,15 @@
+﻿@using Services.Entities.Audio
+@using Services.Entities.VerificationProfile
+@model Services.Entities.VerificationProfile.VerificationProfile
+
+<form asp-controller="AudioVerification" asp-action="CreateProfile" method="post" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    @Html.EditorFor(x => x.Name)
+
+    @Html.DropDownListFor(m => m.SelectedLocale, new SelectList(Model.Locale, "Value", "Text"), "Select")
+
+    <input type="submit" value="Submit"/>
+
+</form>

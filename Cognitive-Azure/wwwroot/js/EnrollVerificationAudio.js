@@ -11,7 +11,7 @@ worker.onmessage = function (event) {
     form.append("Audio", event.data.blob);
 
     var request = new XMLHttpRequest();
-    request.open("POST", "/Audio/EnrollProfile/" + id, true);
+    request.open("POST", "/AudioVerification/EnrollProfile/" + id, true);
 
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
@@ -22,7 +22,7 @@ worker.onmessage = function (event) {
                 response = request.responseText;
             }
 
-            console.log(response);
+            updateEnrollmentStatus(response);
         }
     }
     request.send(form);
@@ -38,22 +38,7 @@ $(function () {
         e.preventDefault();
         stopRecordingProcess(true);
     });
-
-    setTimeout(checkEnrollment, 1000);
 });
-
-
-function checkEnrollment() {
-    var id = $("#Id").val();
-
-    var url = "/Audio/CheckEnrollmentStatus/" + id;
-
-    $.ajax({
-        dataType: "json",
-        url: url,
-        success: updateEnrollmentStatus
-    });
-}
 
 function updateEnrollmentStatus(data) {
 

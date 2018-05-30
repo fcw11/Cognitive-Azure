@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Entities.Audio;
 using Services.Interfaces;
 
-namespace Cognitive_Azure.Features.Audio
+namespace Cognitive_Azure.Features.AudioIdentification
 {
-    public class AudioController : Controller
+    public class AudioIdentificationController : Controller
     {
-        public IAudioService AudioService { get; set; }
+        public IAudioIdentificationService AudioIdentificationService { get; set; }
 
-        public AudioController(IAudioService audioService)
+        public AudioIdentificationController(IAudioIdentificationService audioIdentificationService)
         {
-            AudioService = audioService;
+            AudioIdentificationService = audioIdentificationService;
         }
 
         public IActionResult Index()
@@ -33,7 +33,7 @@ namespace Cognitive_Azure.Features.Audio
         {
             if (ModelState.IsValid)
             {
-               var profileId = await AudioService.CreateProfile(model);
+               var profileId = await AudioIdentificationService.CreateProfile(model);
 
                 return RedirectToAction("EnrollProfile", new { id = profileId });
             }
@@ -53,7 +53,7 @@ namespace Cognitive_Azure.Features.Audio
         {
             if (ModelState.IsValid)
             {
-                await AudioService.EnrollProfile(model);
+                await AudioIdentificationService.EnrollProfile(model);
             }
 
             return View(model);
@@ -62,7 +62,7 @@ namespace Cognitive_Azure.Features.Audio
         [HttpGet]
         public async Task<JsonResult> CheckEnrollmentStatus(Guid id)
         {
-            var result = await AudioService.CheckEnrollmentStatus(id);
+            var result = await AudioIdentificationService.CheckEnrollmentStatus(id);
 
             return new JsonResult(result);
         }
@@ -70,7 +70,7 @@ namespace Cognitive_Azure.Features.Audio
         [HttpGet]
         public async Task<IActionResult> IdentifySpeaker()
         {
-            var profiles = await AudioService.GetProfiles();
+            var profiles = await AudioIdentificationService.GetProfiles();
 
             profiles = profiles.Where(x => x.EnrollmentStatus != null && x.EnrollmentStatus.EnrollmentStatusEnrollmentStatus == "Enrolled");
 
@@ -82,7 +82,7 @@ namespace Cognitive_Azure.Features.Audio
         {
             if (ModelState.IsValid)
             {
-                var result = await AudioService.IdentifySpeaker(model);
+                var result = await AudioIdentificationService.IdentifySpeaker(model);
 
                 return new JsonResult(result);
             }
@@ -95,7 +95,7 @@ namespace Cognitive_Azure.Features.Audio
         {
             if (ModelState.IsValid)
             {
-               var result = await AudioService.PollIdentifySpeaker(url);
+               var result = await AudioIdentificationService.PollIdentifySpeaker(url);
 
                 return new JsonResult(result);
             }
@@ -106,7 +106,7 @@ namespace Cognitive_Azure.Features.Audio
         [HttpGet]
         public async Task<IActionResult> DeleteSpeakers()
         {
-            await AudioService.DeleteProfiles();
+            await AudioIdentificationService.DeleteProfiles();
 
             return View();
         }

@@ -28,7 +28,8 @@ namespace Cognitive_Azure
             services.AddSingleton<ICloudStorageService, CloudStorageService>();
             services.AddSingleton<ICloudTableService, CloudTableService>();
             services.AddSingleton<ITextService, TextService>();
-            services.AddSingleton<IAudioService, AudioService>();
+            services.AddSingleton<IAudioIdentificationService, AudioIdentificationService>();
+            services.AddSingleton<IAudioVerificationService, AudioVerificationService>();
             services.AddSingleton<IImageService, ImageService>();
         }
 
