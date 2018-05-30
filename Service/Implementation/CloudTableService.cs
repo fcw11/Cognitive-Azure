@@ -32,7 +32,8 @@ namespace Services.Implementation
             {
                 "ImagesTable",
                 "CommentsTable",
-                "AudioProfileTable"
+                "AudioIdentificationProfileTable",
+                "AudioVerificationProfileTable"
             };
 
             foreach (var configurationName in list)

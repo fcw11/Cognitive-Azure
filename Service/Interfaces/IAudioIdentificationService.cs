@@ -5,7 +5,7 @@ using Services.Entities.Audio;
 
 namespace Services.Interfaces
 {
-    public interface IAudioService
+    public interface IAudioIdentificationService
     {
         Task<Guid> CreateProfile(AudioProfile profile);
         Task EnrollProfile(EnrollProfile model);

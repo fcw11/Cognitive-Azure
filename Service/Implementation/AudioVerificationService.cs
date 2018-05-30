@@ -1,23 +1,27 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using NAudio.Wave;
 using Services.Entities.Audio;
 using Services.Entities.JSON;
 using Services.Entities.JSON.Audio;
+using Services.Entities.VerificationProfile;
 using Services.Interfaces;
+using VerificationProfile = Services.Entities.JSON.Audio.VerificationProfile;
 
 namespace Services.Implementation
 {
-    public class AudioService : IAudioService
+    public class AudioVerificationService : IAudioVerificationService
     {
         public IConfiguration Configuration { get; set; }
 
         public ICloudTableService CloudTableService { get; set; }
 
-        public AudioService(IConfiguration configuration, ICloudTableService cloudTableService)
+        public AudioVerificationService(IConfiguration configuration, ICloudTableService cloudTableService)
         {
             Configuration = configuration;
             CloudTableService = cloudTableService;
@@ -25,11 +29,11 @@ namespace Services.Implementation
 
         public async Task<Guid> CreateProfile(AudioProfile profile)
         {
-            var url = Configuration["AudioAnalyticsAPI"] + "identificationProfiles";
+            var url = Configuration["AudioAnalyticsAPI"] + "verificationProfiles";
 
             var key = Configuration["AudioAnalyticsKey"];
 
-            var tableName = Configuration["AudioProfileTable"];
+            var tableName = Configuration["AudioVerificationProfileTable"];
 
             var payload = $"{{\"locale\" : \"{ profile.SelectedLocale.ToLower() }\"}}";
 
@@ -43,7 +47,7 @@ namespace Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
+                    var result = JSONHelper.FromJson<VerificationProfile>(responseBytes);
 
                     profile.Id = Guid.Parse(result.IdentificationProfileId);
 
@@ -60,25 +64,51 @@ namespace Services.Implementation
             }
         }
 
-        public  async Task EnrollProfile(EnrollProfile model)
+        public  async Task EnrollProfile(EnrollVerificationProfile model)
         {
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ model.Id }/enroll";
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }verificationProfiles/{ model.Id }/enroll";
 
             var key = Configuration["AudioAnalyticsKey"];
-
-            using (var stream = model.Audio.OpenReadStream())
+            try
             {
-                var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
-
-                var responseBytes = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
+                using (var inputStream = model.Audio.OpenReadStream())
                 {
-                    var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
-                }
+                    var outputStream = new MemoryStream();
+                    var reader = new WaveFileReader(inputStream);
+                    var outFormat = new WaveFormat(16000, reader.WaveFormat.Channels);
 
-                throw new Exception($"Failed request : { responseBytes } ");
+                    using (var resampler = new WaveFormatConversionStream(outFormat, reader))
+                    {
+                        var writer = new WaveFileWriter(outputStream, outFormat);
+
+                        WaveFileWriter.CreateWaveFile("hello.wav", resampler);
+                    }
+
+                    using (var fileStream = new FileStream("test.wav", FileMode.Create))
+                    {
+                        
+                        await writer.CopyToAsync(fileStream);
+                        //await outputStream.CopyToAsync(fileStream);
+                    }
+
+                    //var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
+
+                    //var responseBytes = await response.Content.ReadAsStringAsync();
+
+                    //if (response.IsSuccessStatusCode)
+                    //{
+                    //    //var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
+                    //}
+
+                    // throw new Exception($"Failed request : { responseBytes } ");
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+
+
         }
 
         public async Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id)
@@ -101,6 +131,26 @@ namespace Services.Implementation
             throw new Exception($"Failed request : { responseBytes } ");
         }
 
+        public async Task<EnrollmentPhrases[]> GetVerificationPhrases(string locale)
+        {
+            var url = $"{ Configuration["AudioAnalyticsAPI"] }verificationPhrases?locale={ locale }";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var response = await CognitiveServicesHttpClient.HttpGet(url, key);
+
+            var responseBytes = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JSONHelper.FromJson<EnrollmentPhrases[]>(responseBytes);
+
+                return result;
+            }
+
+            return new EnrollmentPhrases[]{};
+        }
+
         public async Task<IQueryable<AudioProfile>> GetProfiles()
         {
             var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles";
@@ -115,7 +165,7 @@ namespace Services.Implementation
             {
                 var enrollments = JSONHelper.FromJson<EnrollmentStatus[]>(responseBytes);
 
-                var table = Configuration["AudioProfileTable"];
+                var table = Configuration["AudioVerificationProfileTable"];
 
                 var audioProfiles = await CloudTableService.Retrieve<AudioProfile>(table);
 
