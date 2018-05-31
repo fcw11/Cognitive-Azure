@@ -51,7 +51,8 @@ namespace Cognitive_Azure.Features.AudioVerification
         {
             if (ModelState.IsValid)
             {
-                await AudioVerificationService.EnrollProfile(model);
+                var result = await AudioVerificationService.EnrollProfile(model);
+                return new JsonResult(result);
             }
 
             return new JsonResult(string.Empty);

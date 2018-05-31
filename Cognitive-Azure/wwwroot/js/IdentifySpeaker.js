@@ -6,6 +6,7 @@ var worker = new Worker('/js/EncoderWorker.js');
 var pollingUrl;
 
 worker.onmessage = function (event) {
+
     var form = new FormData();
     form.append("__RequestVerificationToken", $("input[name='__RequestVerificationToken']").val());
     form.append("Audio", event.data.blob);

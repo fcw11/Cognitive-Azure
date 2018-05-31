@@ -9,7 +9,7 @@ namespace Services.Interfaces
     public interface IAudioVerificationService
     {
         Task<Guid> CreateProfile(AudioProfile profile);
-        Task EnrollProfile(EnrollVerificationProfile model);
+        Task<string> EnrollProfile(EnrollVerificationProfile model);
         Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id);
         Task<EnrollmentPhrases[]> GetVerificationPhrases(string locale);
         Task<IQueryable<AudioProfile>> GetProfiles();

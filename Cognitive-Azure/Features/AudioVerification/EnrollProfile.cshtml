@@ -3,8 +3,7 @@
 
 @section Scripts {
     <script src="~/js/EnrollVerificationAudio.js"></script>
-    <script src="~/js/RecordAudio.js"></script>
-    <script type="text/javascript" src="~/js/wav-audio-encoder-js/lib/WavAudioEncoder.js"></script>
+    <script src="~/js/recorder.js"></script>
 }
 
 <form asp-controller="AudioVerification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
@@ -12,7 +11,7 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(x => x.Id)
-    
+
     <button id="startRecording">Start</button>
 
     <button id="stopRecording">Stop</button>
@@ -20,14 +19,13 @@
 
 <table>
     <tbody>
-    @foreach (var verificationPhrase in Model.VerificationPhrases)
-    {
-        <tr>
-            <td>@verificationPhrase.Phrase</td>
-        </tr>
-    }
+        @foreach (var verificationPhrase in Model.VerificationPhrases)
+        {
+            <tr>
+                <td>@verificationPhrase.Phrase</td>
+            </tr>
+        }
     </tbody>
 </table>
-
 
 <div class="col-12" id="status"></div>

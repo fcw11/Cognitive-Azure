@@ -5,10 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using NAudio.Wave;
 using Services.Entities.Audio;
 using Services.Entities.JSON;
-using Services.Entities.JSON.Audio;
 using Services.Entities.VerificationProfile;
 using Services.Interfaces;
 using VerificationProfile = Services.Entities.JSON.Audio.VerificationProfile;
@@ -64,51 +62,20 @@ namespace Services.Implementation
             }
         }
 
-        public  async Task EnrollProfile(EnrollVerificationProfile model)
+        public async Task<string> EnrollProfile(EnrollVerificationProfile model)
         {
             var url = $"{ Configuration["AudioAnalyticsAPI"] }verificationProfiles/{ model.Id }/enroll";
 
             var key = Configuration["AudioAnalyticsKey"];
-            try
+
+            using (var inputStream = model.Audio.OpenReadStream())
             {
-                using (var inputStream = model.Audio.OpenReadStream())
-                {
-                    var outputStream = new MemoryStream();
-                    var reader = new WaveFileReader(inputStream);
-                    var outFormat = new WaveFormat(16000, reader.WaveFormat.Channels);
+                var response = await CognitiveServicesHttpClient.HttpPost(inputStream, url, key);
 
-                    using (var resampler = new WaveFormatConversionStream(outFormat, reader))
-                    {
-                        var writer = new WaveFileWriter(outputStream, outFormat);
+                var responseBytes = await response.Content.ReadAsStringAsync();
 
-                        WaveFileWriter.CreateWaveFile("hello.wav", resampler);
-                    }
-
-                    using (var fileStream = new FileStream("test.wav", FileMode.Create))
-                    {
-                        
-                        await writer.CopyToAsync(fileStream);
-                        //await outputStream.CopyToAsync(fileStream);
-                    }
-
-                    //var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
-
-                    //var responseBytes = await response.Content.ReadAsStringAsync();
-
-                    //if (response.IsSuccessStatusCode)
-                    //{
-                    //    //var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
-                    //}
-
-                    // throw new Exception($"Failed request : { responseBytes } ");
-                }
+                return responseBytes;
             }
-            catch (Exception ex)
-            {
-
-            }
-
-
         }
 
         public async Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id)
