@@ -30,7 +30,7 @@ namespace Cognitive_Azure.Features.AudioVerification
             {
                 var profileId = await AudioVerificationService.CreateProfile(model);
 
-                return RedirectToAction("EnrollProfile", new { id = profileId, model.Locale });
+                return RedirectToAction("EnrollProfile", new { id = profileId, locale = model.SelectedLocale });
             }
 
             return View(model);
@@ -58,56 +58,12 @@ namespace Cognitive_Azure.Features.AudioVerification
             return new JsonResult(string.Empty);
         }
 
-        //[HttpGet]
-        //public async Task<JsonResult> CheckEnrollmentStatus(Guid id)
-        //{
-        //    var result = await AudioService.CheckEnrollmentStatus(id);
+        [HttpGet]
+        public async Task<JsonResult> DeleteSpeakers()
+        {
+            await AudioVerificationService.DeleteProfiles();
 
-        //    return new JsonResult(result);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> IdentifySpeaker()
-        //{
-        //    var profiles = await AudioService.GetProfiles();
-
-        //    profiles = profiles.Where(x => x.EnrollmentStatus != null && x.EnrollmentStatus.EnrollmentStatusEnrollmentStatus == "Enrolled");
-
-        //    return View(profiles);
-        //}
-
-        //[HttpPost]
-        //public async Task<JsonResult> IdentifySpeaker(IdentifyProfile model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await AudioService.IdentifySpeaker(model);
-
-        //        return new JsonResult(result);
-        //    }
-
-        //    return new JsonResult(string.Empty);
-        //}
-
-        //[HttpGet]
-        //public async Task<JsonResult> PollIdentifySpeaker(string url)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await AudioService.PollIdentifySpeaker(url);
-
-        //        return new JsonResult(result);
-        //    }
-
-        //    return new JsonResult(string.Empty);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> DeleteSpeakers()
-        //{
-        //    await AudioService.DeleteProfiles();
-
-        //    return View();
-        //}
+            return new JsonResult(string.Empty);
+        }
     }
 }
