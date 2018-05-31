@@ -3,8 +3,7 @@
 
 @section Scripts {
     <script src="~/js/IdentifySpeaker.js"></script>
-    <script src="~/js/RecordAudio.js"></script>
-    <script type="text/javascript" src="~/js/wav-audio-encoder-js/lib/WavAudioEncoder.js"></script>
+    <script src="~/js/recorder.js"></script>
 }
 
 <form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
@@ -24,13 +23,13 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var profile in Model)
-    {
-        <tr id="@profile.Id">
-            <td>@profile.Name</td>
-            <td></td>
-        </tr>
-    }
+        @foreach (var profile in Model)
+        {
+            <tr id="@profile.Id">
+                <td>@profile.Name</td>
+                <td></td>
+            </tr>
+        }
     </tbody>
 </table>
 
