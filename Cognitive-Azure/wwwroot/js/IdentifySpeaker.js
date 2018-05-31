@@ -1,4 +1,4 @@
-﻿var checkEnrollmentInterval = 10000;
+﻿var checkEnrollmentInterval = 5000;
 var pollingUrl;
 var recorder;
 var audio_context;
@@ -72,7 +72,6 @@ $(function () {
     }
 
     function updateResult(data) {
-
         var prettifiedResponse = syntaxHighlight(data);
 
         prettifiedResponse = prettifiedResponse.replace(/{/g, "{<br />").replace(/}/g, "<br />}").replace(/,/g, ",<br />");
@@ -81,6 +80,11 @@ $(function () {
 
         if (data.status == "") {
             setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
+        } else {
+            $("tr").removeClass('verified');
+            $("tr td:nth-child(2)").html('');
+            $("tr[id='" + data.processingResult.identifiedProfileId + "']").addClass('verified');
+            $("tr[id='" + data.processingResult.identifiedProfileId + "'] td:last").html(data.processingResult.confidence);
         }
     }
 

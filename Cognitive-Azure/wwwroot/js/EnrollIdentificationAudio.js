@@ -1,4 +1,4 @@
-﻿var checkEnrollmentInterval = 10000;
+﻿var checkEnrollmentInterval = 3000;
 var recorder;
 var audio_context;
 

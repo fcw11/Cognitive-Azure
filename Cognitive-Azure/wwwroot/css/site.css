@@ -141,3 +141,8 @@
 #status .boolean { color: blue; }
 #status .null { color: magenta; }
 #status .key { color: red; padding-left: 25px; }
+
+ .verified td {
+     background-color: lightgreen;
+     font-weight: bold;
+ }
