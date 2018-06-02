@@ -12,9 +12,10 @@ namespace Services.Interfaces
         Task<string> EnrollProfile(EnrollVerificationProfile model);
         Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id);
         Task<EnrollmentPhrases[]> GetVerificationPhrases(string locale);
-        Task<IQueryable<AudioProfile>> GetProfiles();
+        Task<IQueryable<AudioProfile>> GetEnrolledProfiles();
         Task DeleteProfiles();
         Task<string> IdentifySpeaker(IdentifyProfile model);
         Task<string> PollIdentifySpeaker(string url);
+        Task<VerifySpeakerResponse> VerifySpeaker(VerifySpeaker model);
     }
 }

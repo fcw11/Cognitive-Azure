@@ -13,6 +13,6 @@ namespace Services.Interfaces
         Task<IQueryable<AudioProfile>> GetProfiles();
         Task DeleteProfiles();
         Task<string> IdentifySpeaker(IdentifyProfile model);
-        Task<string> PollIdentifySpeaker(string url);
+        Task<IdentificationStatus> PollIdentifySpeaker(string url);
     }
 }

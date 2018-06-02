@@ -172,13 +172,22 @@ namespace Services.Implementation
             }
         }
 
-        public async Task<string> PollIdentifySpeaker(string url)
+        public async Task<IdentificationStatus> PollIdentifySpeaker(string url)
         {
             var key = Configuration["AudioAnalyticsKey"];
 
             var response = await CognitiveServicesHttpClient.HttpGet(url, key);
 
-            return await response.Content.ReadAsStringAsync();
+            var responseBytes = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JSONHelper.FromJson<IdentificationStatus>(responseBytes);
+
+                return result;
+            }
+
+            throw new Exception($"Failed request : { responseBytes } ");
         }
     }
 }

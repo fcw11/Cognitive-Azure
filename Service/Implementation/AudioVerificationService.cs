@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -33,7 +33,7 @@ namespace Services.Implementation
 
             var tableName = Configuration["AudioVerificationProfileTable"];
 
-            var payload = $"{{\"locale\" : \"{ profile.SelectedLocale.ToLower() }\"}}";
+            var payload = $"{{\"locale\" : \"{profile.SelectedLocale.ToLower()}\"}}";
 
             var byteData = Encoding.UTF8.GetBytes(payload);
 
@@ -58,13 +58,13 @@ namespace Services.Implementation
                     return profile.Id;
                 }
 
-                throw new Exception($"Failed request : { responseBytes } ");
+                throw new Exception($"Failed request : {responseBytes} ");
             }
         }
 
         public async Task<string> EnrollProfile(EnrollVerificationProfile model)
         {
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }verificationProfiles/{ model.Id }/enroll";
+            var url = $"{Configuration["AudioAnalyticsAPI"]}verificationProfiles/{model.Id}/enroll";
 
             var key = Configuration["AudioAnalyticsKey"];
 
@@ -80,7 +80,7 @@ namespace Services.Implementation
 
         public async Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id)
         {
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ id }";
+            var url = $"{Configuration["AudioAnalyticsAPI"]}identificationProfiles/{id}";
 
             var key = Configuration["AudioAnalyticsKey"];
 
@@ -95,12 +95,12 @@ namespace Services.Implementation
                 return result;
             }
 
-            throw new Exception($"Failed request : { responseBytes } ");
+            throw new Exception($"Failed request : {responseBytes} ");
         }
 
         public async Task<EnrollmentPhrases[]> GetVerificationPhrases(string locale)
         {
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }verificationPhrases?locale={ locale }";
+            var url = $"{Configuration["AudioAnalyticsAPI"]}verificationPhrases?locale={locale}";
 
             var key = Configuration["AudioAnalyticsKey"];
 
@@ -115,12 +115,12 @@ namespace Services.Implementation
                 return result;
             }
 
-            return new EnrollmentPhrases[]{};
+            return new EnrollmentPhrases[] { };
         }
 
-        public async Task<IQueryable<AudioProfile>> GetProfiles()
+        public async Task<IQueryable<AudioProfile>> GetEnrolledProfiles()
         {
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles";
+            var url = $"{Configuration["AudioAnalyticsAPI"]}verificationProfiles";
 
             var key = Configuration["AudioAnalyticsKey"];
 
@@ -136,41 +136,55 @@ namespace Services.Implementation
 
                 var audioProfiles = await CloudTableService.Retrieve<AudioProfile>(table);
 
+                var profiles = new List<AudioProfile>();
+
                 foreach (var enrollment in enrollments)
                 {
-                    var profile = audioProfiles.SingleOrDefault(x => x.Id.ToString() == enrollment.IdentificationProfileId);
-                    
-                    if (profile != null) profile.EnrollmentStatus = enrollment;
+                    var profile = audioProfiles.SingleOrDefault(x => x.Id.ToString() == enrollment.VerificationProfileId);
+
+                    if (profile != null)
+                    {
+                        profile.EnrollmentStatus = enrollment;
+                        profiles.Add(profile);
+                    }
                 }
 
-                return audioProfiles;
+                return profiles.Where(x => x.EnrollmentStatus != null && x.EnrollmentStatus.EnrollmentStatusEnrollmentStatus == "Enrolled").AsQueryable();
             }
 
-            throw new Exception($"Failed request : { responseBytes } ");
+            throw new Exception($"Failed request : {responseBytes} ");
         }
 
         public async Task DeleteProfiles()
         {
-            var profiles = await GetProfiles();
-
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/";
+            var url = $"{Configuration["AudioAnalyticsAPI"]}verificationProfiles/";
 
             var key = Configuration["AudioAnalyticsKey"];
 
-            foreach (var profile in profiles)
+            var response = await CognitiveServicesHttpClient.HttpGet(url, key);
+
+            var responseBytes = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
             {
-                var profileUrl = url + profile.Id;
-                await CognitiveServicesHttpClient.HttpDelete(profileUrl, key);
+                var enrollments = JSONHelper.FromJson<EnrollmentStatus[]>(responseBytes);
+
+                foreach (var enrollment in enrollments)
+                {
+                    var profileUrl = url + enrollment.VerificationProfileId;
+
+                    var r = await CognitiveServicesHttpClient.HttpDelete(profileUrl, key);
+                }
             }
         }
 
         public async Task<string> IdentifySpeaker(IdentifyProfile model)
         {
-            var profiles = await GetProfiles();
+            var profiles = await GetEnrolledProfiles();
 
-            var identificationProfileIds = string.Join(",", profiles.Where(x => x.EnrollmentStatus != null &&  x.EnrollmentStatus.EnrollmentStatusEnrollmentStatus == "Enrolled" ).Select(x => x.Id));
+            var identificationProfileIds = string.Join(",", profiles.Select(x => x.Id));
 
-            var url = $"{ Configuration["AudioAnalyticsAPI"] }identify?identificationProfileIds={ identificationProfileIds }";
+            var url = $"{Configuration["AudioAnalyticsAPI"]}identify?identificationProfileIds={identificationProfileIds}";
 
             var key = Configuration["AudioAnalyticsKey"];
 
@@ -182,10 +196,10 @@ namespace Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                   return response.Headers.GetValues("Operation-Location").FirstOrDefault();
+                    return response.Headers.GetValues("Operation-Location").FirstOrDefault();
                 }
 
-                throw new Exception($"Failed request : { responseBytes } ");
+                throw new Exception($"Failed request : {responseBytes} ");
             }
         }
 
@@ -196,6 +210,22 @@ namespace Services.Implementation
             var response = await CognitiveServicesHttpClient.HttpGet(url, key);
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<VerifySpeakerResponse> VerifySpeaker(VerifySpeaker model)
+        {
+            var url = $"{Configuration["AudioAnalyticsAPI"]}verify?verificationProfileId={model.Id}";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            using (var inputStream = model.Audio.OpenReadStream())
+            {
+                var response = await CognitiveServicesHttpClient.HttpPost(inputStream, url, key);
+
+                var responseBytes = await response.Content.ReadAsStringAsync();
+
+                return JSONHelper.FromJson<VerifySpeakerResponse>(responseBytes);
+            }
         }
     }
 }

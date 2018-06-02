@@ -7,6 +7,9 @@ namespace Services.Entities.Audio
         [JsonProperty("identificationProfileId")]
         public string IdentificationProfileId { get; set; }
 
+        [JsonProperty("verificationProfileId")]
+        public string VerificationProfileId {get;set;}
+
         [JsonProperty("locale")]
         public string Locale { get; set; }
 

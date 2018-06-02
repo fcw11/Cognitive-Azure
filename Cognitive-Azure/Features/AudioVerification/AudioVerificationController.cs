@@ -46,12 +46,31 @@ namespace Cognitive_Azure.Features.AudioVerification
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> EnrollProfile(EnrollVerificationProfile model)
         {
             if (ModelState.IsValid)
             {
                 var result = await AudioVerificationService.EnrollProfile(model);
+                return new JsonResult(result);
+            }
+
+            return new JsonResult(string.Empty);
+        }
+
+        public async Task<IActionResult> VerifySpeaker()
+        {
+            var speakers = await AudioVerificationService.GetEnrolledProfiles();
+
+            return View(speakers);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> VerifySpeaker(VerifySpeaker model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await AudioVerificationService.VerifySpeaker(model);
                 return new JsonResult(result);
             }
 

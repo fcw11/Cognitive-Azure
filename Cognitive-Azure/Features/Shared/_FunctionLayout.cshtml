@@ -22,6 +22,9 @@
     <li class="nav-item">
         <a asp-controller="AudioVerification" asp-action="CreateProfile" class="nav-link @(string.CompareOrdinal(action, "CreateProfile") == 0 && string.CompareOrdinal(controller, "Audio") == 0 ? "active" : string.Empty)">Register Verification Profile</a>
     </li>
+    <li class="nav-item">
+        <a asp-controller="AudioVerification" asp-action="VerifySpeaker" class="nav-link @(string.CompareOrdinal(action, "VerifySpeaker") == 0 && string.CompareOrdinal(controller, "Audio") == 0 ? "active" : string.Empty)">Verify Speaker Profile</a>
+    </li>
 </ul>
 
 @RenderBody()

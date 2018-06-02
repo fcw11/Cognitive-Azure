@@ -1,0 +1,36 @@
+﻿@using Services.Entities.Audio
+@model IQueryable<AudioProfile>
+
+@section Scripts {
+    <script src="~/js/VerifySpeaker.js"></script>
+    <script src="~/js/recorder.js"></script>
+}
+
+<form asp-controller="AudioVerification" asp-action="VerifySpeaker" method="post" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    <button id="startRecording">Start</button>
+
+    <button id="stopRecording">Stop</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in Model)
+        {
+            <tr id="@profile.Id">
+                <td>@Html.RadioButton("SelectedProfile", profile.Id, false)
+                <td>@profile.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="col-12" id="status"></div>

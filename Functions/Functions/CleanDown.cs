@@ -15,7 +15,8 @@ namespace Functions.Functions
             [TimerTrigger("0 0 22 * * *")]TimerInfo myTimer, 
             [Table("Images")] CloudTable imageTable,
             [Table("ImageComments")] CloudTable imageCommentTable,
-            [Table("AudioProfiles")] CloudTable audioProfilesTable,
+            [Table("AudioIdentificationProfiles")] CloudTable audioIdentificationProfilesTable,
+            [Table("AudioVerificationProfiles")] CloudTable audioVerficationProfilesTable,
             [Blob("images", FileAccess.Read)] CloudBlobContainer imagesContainer,
             [Blob("thumbnails", FileAccess.Read)] CloudBlobContainer thumbnailsContainer,
             [Blob("faces", FileAccess.Read)] CloudBlobContainer facesContainer,
@@ -35,11 +36,18 @@ namespace Functions.Functions
                 await imageCommentTable.ExecuteAsync(TableOperation.Delete(entity));
             }
 
-            var audioProfileTableEntities = audioProfilesTable.ExecuteQuery(new TableQuery()).ToList();
+            var audioIdentificationProfileTableEntities = audioIdentificationProfilesTable.ExecuteQuery(new TableQuery()).ToList();
 
-            foreach (var entity in audioProfileTableEntities)
+            foreach (var entity in audioIdentificationProfileTableEntities)
             {
-                await audioProfilesTable.ExecuteAsync(TableOperation.Delete(entity));
+                await audioIdentificationProfilesTable.ExecuteAsync(TableOperation.Delete(entity));
+            }
+
+            var audioVerificationProfileTableEntities = audioVerficationProfilesTable.ExecuteQuery(new TableQuery()).ToList();
+
+            foreach (var entity in audioVerificationProfileTableEntities)
+            {
+                await audioVerficationProfilesTable.ExecuteAsync(TableOperation.Delete(entity));
             }
 
             var imageBlobEntities = imagesContainer.ListBlobs(string.Empty, true);

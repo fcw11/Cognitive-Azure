@@ -29,6 +29,8 @@ namespace Services.Entities.Audio
         [Required]
         public string SelectedLocale { set; get; }
 
+        public Guid SelectedProfile { get; set; }
+
         public EnrollmentStatus EnrollmentStatus { get; set; }
 
         public IEnumerable<SelectListItem> Locale { get; set; }
