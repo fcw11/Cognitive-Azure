@@ -31,14 +31,16 @@
             <table id="phrases">
                 <tbody>
                     @foreach (var verificationPhrase in Model.VerificationPhrases)
-                {
-                    <tr>
-                        <td>@verificationPhrase.Phrase</td>
-                    </tr>
-            }
+                    {
+                        <tr>
+                            <td>@verificationPhrase.Phrase</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6 verificationStatus" id="status"></div>
+        <div class="col-md-6 verificationStatus" id="status">
+            Choose any phrases on the left, and record the <b>same</b> three seperate times to enroll your profile.
+        </div>
     </div>
 </div>

@@ -116,6 +116,10 @@
     width: 100%;
 }
 
+ .comments td:nth-child(1){
+     width: 70%;
+ }
+
 .comments th,td {
     border: 1px;
     border-style: dashed;

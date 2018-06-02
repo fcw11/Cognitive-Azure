@@ -49,7 +49,7 @@ namespace Services.Entities
 
         public string Handwriting { get; set; }
 
-        public HandwritingRequest DeseralisedHandwriting => !string.IsNullOrEmpty(Handwriting) ? JSONHelper.FromJson<HandwritingRequest>(Handwriting) : null;
+        public Handwriting DeseralisedHandwriting => !string.IsNullOrEmpty(Handwriting) ? JSONHelper.FromJson<Handwriting>(Handwriting) : null;
 
         public string Faces { get; set; }
 

@@ -7,27 +7,40 @@
 }
 
 <div class="container container-outline">
-    <div class="row row-padding">
-        <div class="col-md-12">
-            <form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
-                
-                <a asp-action="CreateProfile" asp-controller="AudioIdentification" class="btn btn-info button">Create Profile</a>
-
-                @Html.AntiForgeryToken()
-
-                <button id="startRecording" class="btn btn-info button">Start recording</button>
-
-                <button id="stopRecording" class="btn btn-info hidden button">Stop recording</button>
-
-                <span id="timer"></span>
-            </form>
+    
+    @if (!Model.Any())
+    {
+        <div class="row row-padding">
+            <div class="col-md-12">
+                <div>
+                    No identification profiles exist, try <a asp-action="CreateProfile" asp-controller="AudioIdentification" class="btn btn-info">creating</a> a profile.
+                </div>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="row row-padding">
+            <div class="col-md-12">
+                <form asp-action="EnrollProfile" asp-controller="AudioIdentification"  method="post" enctype="multipart/form-data">
 
-    <div class="row row-padding">
-        <div class="col-md-6">
-            <table id="speakers">
-                <tbody>
+                    <a asp-action="CreateProfile" asp-controller="AudioIdentification" class="btn btn-info button">Create Profile</a>
+
+                    @Html.AntiForgeryToken()
+
+                    <button id="startRecording" class="btn btn-info button">Start recording</button>
+
+                    <button id="stopRecording" class="btn btn-info hidden button">Stop recording</button>
+
+                    <span id="timer"></span>
+                </form>
+            </div>
+        </div>
+
+        <div class="row row-padding">
+            <div class="col-md-6">
+                <table id="speakers">
+                    <tbody>
                     @foreach (var profile in Model)
                     {
                         <tr id="@profile.Id">
@@ -35,12 +48,12 @@
                             <td></td>
                         </tr>
                     }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div id="status"> </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <div id="status"> </div>
-        </div>
-    </div>
-
+    }
 </div>

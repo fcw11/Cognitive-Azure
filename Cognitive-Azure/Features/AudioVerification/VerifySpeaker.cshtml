@@ -6,27 +6,40 @@
     <script src="~/js/recorder.js"></script>
 }
 <div class="container container-outline">
-    <div class="row row-padding">
-        <div class="col-md-6">
-            <form asp-controller="AudioVerification" asp-action="VerifySpeaker" method="post" enctype="multipart/form-data">
-
-                <a asp-action="CreateProfile" asp-controller="AudioVerification" class="btn btn-info button">Create Profile</a>
-            
-                @Html.AntiForgeryToken()
-
-                <button id="startRecording" class="btn btn-info">Start recording</button>
-
-                <button id="stopRecording" class="btn btn-info hidden">Stop recording</button>
-
-                <span id="timer"></span>
-            </form>
+    
+    @if (!Model.Any())
+    {
+        <div class="row row-padding">
+            <div class="col-md-12">
+                <div>
+                    No verification profiles exist, try <a asp-action="CreateProfile" asp-controller="AudioVerification" class="btn btn-info">creating</a> a profile.
+                </div>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="row row-padding">
+            <div class="col-md-6">
+                <form asp-action="VerifySpeaker" asp-controller="AudioVerification"  method="post" enctype="multipart/form-data">
 
-    <div class="row row-padding">
-        <div class="col-md-6">
-            <table id="verification">
-                <tbody>
+                    <a asp-action="CreateProfile" asp-controller="AudioVerification" class="btn btn-info button">Create Profile</a>
+
+                    @Html.AntiForgeryToken()
+
+                    <button id="startRecording" class="btn btn-info">Start recording</button>
+
+                    <button id="stopRecording" class="btn btn-info hidden">Stop recording</button>
+
+                    <span id="timer"></span>
+                </form>
+            </div>
+        </div>
+
+        <div class="row row-padding">
+            <div class="col-md-6">
+                <table id="verification">
+                    <tbody>
                     @foreach (var profile in Model)
                     {
                         <tr id="@profile.Id">
@@ -34,12 +47,12 @@
                             <td>@profile.Name</td>
                         </tr>
                     }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div id="status"> </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <div id="status"> </div>
-        </div>
-    </div>
-
+    }
 </div>

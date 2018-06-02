@@ -60,26 +60,44 @@
     <div class="row">
         <div role="tabpanel" class="col-md-12">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
+                @if (!string.IsNullOrEmpty(Model.Analyse))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#analyze" role="tab" aria-controls="analyze" aria-expanded="true">Analyse</a>
+                    </li>
+                }
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" id="describe-tab" data-toggle="tab" href="#describe" role="tab" aria-controls="describe" aria-expanded="false">Describe</a>
+                    </li>
+                } 
+                @if (Model.DeseralisedFaces != null && Model.DeseralisedFaces.Any())
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" id="faces-tab" data-toggle="tab" href="#faces" role="tab" aria-controls="faces" aria-expanded="False">Faces</a>
+                    </li>
+                } 
+                @if (Model.DeseralisedOCR != null && Model.DeseralisedOCR.Language != "unk")
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" id="ocr-tab" data-toggle="tab" href="#ocr" role="tab" aria-controls="ocr" aria-expanded="false">OCR</a>
+                    </li>
+                } 
+                @if (Model.DeseralisedHandwriting!= null && Model.DeseralisedHandwriting.RecognitionResult.Lines.Any())
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" id="handwriting-tab" data-toggle="tab" href="#handwriting" role="tab" aria-controls="handwriting" aria-expanded="false">Handwriting</a>
+                    </li>
+                } 
+                @if (!string.IsNullOrEmpty(Model.Tag))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" id="tag-tab" data-toggle="tab" href="#tag" role="tab" aria-controls="tag" aria-expanded="false">Tag</a>
+                    </li>
+                } 
                 <li class="nav-item">
-                    <a class="nav-link active" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-expanded="true">Comments</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#analyze" role="tab" aria-controls="analyze" aria-expanded="true">Analyse</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="faces-tab" data-toggle="tab" href="#faces" role="tab" aria-controls="faces" aria-expanded="true">Faces</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="describe-tab" data-toggle="tab" href="#describe" role="tab" aria-controls="describe" aria-expanded="false">Describe</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="ocr-tab" data-toggle="tab" href="#ocr" role="tab" aria-controls="ocr" aria-expanded="false">OCR</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="handwriting-tab" data-toggle="tab" href="#handwriting" role="tab" aria-controls="handwriting" aria-expanded="false">Handwriting</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="tag-tab" data-toggle="tab" href="#tag" role="tab" aria-controls="tag" aria-expanded="false">Tag</a>
+                    <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-expanded="False">Comments</a>
                 </li>
             </ul>
             <div class="tab-content tab-border" id="myTabContent">

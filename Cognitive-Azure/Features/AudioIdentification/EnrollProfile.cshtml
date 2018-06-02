@@ -14,18 +14,24 @@
 
     <div class="row row-padding">
         <div class="col-md-3">
-            <form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
 
-                @Html.AntiForgeryToken()
+            <div class="col-md-12">
+                <form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
 
-                @Html.HiddenFor(x => x.Id)
+                    @Html.AntiForgeryToken()
 
-                <button id="startRecording" class="btn btn-info button">Start recording</button>
+                    @Html.HiddenFor(x => x.Id)
 
-                <button id="stopRecording" class="btn btn-info hidden button">Stop recording</button>
-            
-                <span id="timer"></span>
-            </form>
+                    <button id="startRecording" class="btn btn-info button">Start recording</button>
+
+                    <button id="stopRecording" class="btn btn-info hidden button">Stop recording</button>
+
+                    <span id="timer"></span>
+                </form>
+            </div>
+            <div class="col-md-12">
+                Provide at least 30 seconds of audio to enroll your profile.
+            </div>
         </div>
         <div class="col-md-9">
             <div id="status" class="enrollTimer"> </div>
