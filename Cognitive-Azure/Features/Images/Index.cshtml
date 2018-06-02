@@ -12,7 +12,7 @@
         <div class="row row-padding">
             <div class="col-md-12">
                 <div>
-                    No images to view, try <a asp-action="Upload" asp-controller="Images">uploading</a> one.
+                    No images to view, try <a asp-action="Upload" asp-controller="Images" class="btn btn-info">uploading</a> one.
                 </div>
             </div>
         </div>
@@ -20,6 +20,14 @@
     
     @do
     {
+        <div class="row row-padding">
+            <div class="col-md-12">
+                <div class="float-right">
+                    <a asp-action="Upload" asp-controller="Images" class="btn btn-info">Upload Image</a>
+                </div>
+            </div>
+        </div>
+
         <div class="row row-padding">
             @foreach (var image in Model.Skip(index * imagesPerRow).Take(imagesPerRow))
             {

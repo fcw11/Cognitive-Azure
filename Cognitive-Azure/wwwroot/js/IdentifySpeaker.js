@@ -2,23 +2,34 @@
 var pollingUrl;
 var recorder;
 var audio_context;
+var intervalId;
 
 $(function () {
     $("#startRecording").click(function (e) {
         e.preventDefault();
+
+        $(this).addClass("hidden");
+        $("#stopRecording").removeClass("hidden");
+
         startRecording();
     });
 
     $("#stopRecording").click(function (e) {
         e.preventDefault();
+
+        $(this).addClass("hidden");
+        $("#startRecording").removeClass("hidden");
+
         stopRecording();
     });
 
     function startRecording() {
+        startTimer();
         navigator.getUserMedia({ audio: true }, onSuccess, onError);
     }
 
     function stopRecording() {
+        clearInterval(intervalId);
         recorder && recorder.stop();
         recorder.exportWAV(function (blob) {
             identifySpeaker(blob);
@@ -54,9 +65,12 @@ $(function () {
                     response = request.responseText;
                 }
 
-                pollingUrl = response;
-                setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
-                console.log(response);
+                updateResult(response);
+
+                if (response.OperationLocation != undefined) {
+                    pollingUrl = response.OperationLocation;
+                    setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
+                }
             }
         }
         request.send(form);
@@ -67,8 +81,20 @@ $(function () {
             dataType: "json",
             data: { url: pollingUrl },
             url: "/AudioIdentification/PollIdentifySpeaker",
-            success: updateResult
+            success: pollingSuccess
         });
+    }
+
+    function pollingSuccess(data) {
+        if (data.status != "succeeded") {
+            setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
+        } else {
+            updateResult(data);
+            $("tr").removeClass('verified');
+            $("tr td:nth-child(2)").html('');
+            $("tr[id='" + data.processingResult.identifiedProfileId + "']").addClass('verified');
+            $("tr[id='" + data.processingResult.identifiedProfileId + "'] td:last").html(data.processingResult.confidence);
+        }
     }
 
     function updateResult(data) {
@@ -77,15 +103,6 @@ $(function () {
         prettifiedResponse = prettifiedResponse.replace(/{/g, "{<br />").replace(/}/g, "<br />}").replace(/,/g, ",<br />");
 
         $("#status").html(prettifiedResponse);
-
-        if (data.status == "") {
-            setTimeout(pollIdentificationProcess, checkEnrollmentInterval);
-        } else {
-            $("tr").removeClass('verified');
-            $("tr td:nth-child(2)").html('');
-            $("tr[id='" + data.processingResult.identifiedProfileId + "']").addClass('verified');
-            $("tr[id='" + data.processingResult.identifiedProfileId + "'] td:last").html(data.processingResult.confidence);
-        }
     }
 
     function syntaxHighlight(json) {
@@ -108,5 +125,16 @@ $(function () {
             }
             return '<span class="' + cls + '">' + match + '</span>';
         });
+    }
+
+    function startTimer() {
+        var timer = 0;
+
+        document.getElementById("timer").innerHTML = "0s ";
+
+        intervalId =  setInterval(function () {
+            timer++;
+            document.getElementById("timer").innerHTML = timer + "s ";
+        }, 1000);
     }
 });

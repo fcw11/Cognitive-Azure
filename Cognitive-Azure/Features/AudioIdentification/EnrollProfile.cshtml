@@ -6,15 +6,29 @@
     <script src="~/js/recorder.js"></script>
 }
 
-<form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
+<div class="container container-outline">
 
-    @Html.AntiForgeryToken()
+    <div class="row row-padding ">
+        <h3 class="page-sub-heading">Enroll profile</h3>
+    </div>
 
-    @Html.HiddenFor(x => x.Id)
+    <div class="row row-padding">
+        <div class="col-md-3">
+            <form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
 
-    <button id="startRecording">Start</button>
+                @Html.AntiForgeryToken()
 
-    <button id="stopRecording">Stop</button>
-</form>
+                @Html.HiddenFor(x => x.Id)
 
-<div class="col-12" id="status"></div>
+                <button id="startRecording" class="btn btn-info button">Start recording</button>
+
+                <button id="stopRecording" class="btn btn-info hidden button">Stop recording</button>
+            
+                <span id="timer"></span>
+            </form>
+        </div>
+        <div class="col-md-9">
+            <div id="status" class="enrollTimer"> </div>
+        </div>
+    </div>
+</div>

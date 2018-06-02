@@ -4,11 +4,19 @@ var audio_context;
 $(function () {
     $("#startRecording").click(function (e) {
         e.preventDefault();
+
+        $(this).addClass("hidden");
+        $("#stopRecording").removeClass("hidden");
+
         startRecording();
     });
 
     $("#stopRecording").click(function (e) {
         e.preventDefault();
+
+        $(this).addClass("hidden");
+        $("#startRecording").removeClass("hidden");
+
         stopRecording();
     });
 

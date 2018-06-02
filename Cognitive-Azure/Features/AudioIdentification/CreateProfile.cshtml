@@ -1,13 +1,39 @@
 ﻿@using Services.Entities.Audio
 @model AudioProfile
 
-<form asp-controller="AudioIdentification" asp-action="CreateProfile" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
+<div class="container container-outline">
 
-    @Html.EditorFor(x => x.Name)
-    
-    @Html.DropDownListFor(m => m.SelectedLocale, new SelectList(Model.Locale, "Value", "Text"), "Select")
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <div class="alert alert-info layout-margin-top" role="alert">
+                <strong>Heads up!</strong> Audio profiles are removed daily and are not retained
+            </div>
+        </div>
+    </div>
 
-    <input type="submit" value="Submit" />
+    <div class="row row-padding ">
+        <h3 class="page-sub-heading">Register new Identification profile</h3>
+    </div>
 
-</form>
+    <div class="row row-padding">
+        <form asp-controller="AudioIdentification" asp-action="CreateProfile" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-12 input-spacing">
+                @Html.LabelFor(x => x.Name, new { @class = "input" })
+                @Html.EditorFor(x => x.Name, new { @class = "input" })
+                @Html.ValidationMessageFor(x => x.Name, string.Empty, new { @class = "input invalid-feedback" })
+            </div>
+
+            <div class="col-md-12 input-spacing">
+                @Html.LabelFor(x => x.SelectedLocale, new { @class = "input" })
+                @Html.DropDownListFor(m => m.SelectedLocale, new SelectList(Model.Locale, "Value", "Text"), "Select", new { @class = "input" })
+                @Html.ValidationMessageFor(x => x.SelectedLocale, string.Empty, new { @class = "input invalid-feedback" })
+            </div>
+
+            <div class="col-md-12 input-spacing">
+                <input type="submit" value="Submit" class="btn btn-info input" />
+            </div>
+        </form>
+    </div>
+</div>

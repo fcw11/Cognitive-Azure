@@ -45,18 +45,19 @@ namespace Cognitive_Azure.Features.AudioIdentification
         public IActionResult EnrollProfile(Guid id)
         {
             var model = new EnrollProfile { Id = id };
+
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EnrollProfile(EnrollProfile model)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> EnrollProfile(EnrollProfile model)
         {
             if (ModelState.IsValid)
             {
                 await AudioIdentificationService.EnrollProfile(model);
             }
 
-            return View(model);
+            return new JsonResult(string.Empty);
         }
 
         [HttpGet]
@@ -77,7 +78,7 @@ namespace Cognitive_Azure.Features.AudioIdentification
             return View(profiles);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> IdentifySpeaker(IdentifyProfile model)
         {
             if (ModelState.IsValid)

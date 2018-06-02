@@ -1,23 +1,34 @@
 ﻿var checkEnrollmentInterval = 3000;
 var recorder;
 var audio_context;
+var intervalId;
 
 $(function () {
     $("#startRecording").click(function (e) {
         e.preventDefault();
+
+        $(this).addClass("hidden");
+        $("#stopRecording").removeClass("hidden");
+
         startRecording();
     });
 
     $("#stopRecording").click(function (e) {
         e.preventDefault();
+
+        $(this).addClass("hidden");
+        $("#startRecording").removeClass("hidden");
+
         stopRecording();
     });
 
     function startRecording() {
+        startTimer();
         navigator.getUserMedia({ audio: true }, onSuccess, onError);
     }
 
     function stopRecording() {
+        clearInterval(intervalId);
         recorder && recorder.stop();
         recorder.exportWAV(function (blob) {
             createIdentificationProfile(blob);
@@ -104,6 +115,17 @@ $(function () {
             }
             return '<span class="' + cls + '">' + match + '</span>';
         });
+    }
+
+    function startTimer() {
+        var timer = 0;
+
+        document.getElementById("timer").innerHTML = "0s ";
+
+        intervalId = setInterval(function () {
+            timer++;
+            document.getElementById("timer").innerHTML = timer + "s ";
+        }, 1000);
     }
 
     setTimeout(checkEnrollment, 1000);

@@ -133,7 +133,8 @@
 #status {
     outline: 1px solid #ccc;
     padding: 5px;
-    margin: 5px;
+    /*margin: 5px;*/
+    height: 100%;
 }
 
 #status .string { color: green; }
@@ -146,3 +147,55 @@
      background-color: lightgreen;
      font-weight: bold;
  }
+
+#speakers {
+    width: 100%;
+}
+
+#speakers td {
+    width: 50%;
+}
+
+#phrases {
+     width: 100%;
+ }
+
+#verification {
+    width: 100%;
+}
+
+#verification td:nth-child(1){
+    width: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.timer {
+    padding: 25px;
+}
+
+.button {
+    margin-right: 15px
+}
+
+.input {
+    display: block;
+}
+
+.input-spacing {
+    margin-top: 15px;
+}
+
+.page-sub-heading {
+    margin-left: 15px;
+}
+
+.enrollTimer {
+    height: 260px !important;
+}
+
+.verificationStatus {
+    height: auto !important;
+}

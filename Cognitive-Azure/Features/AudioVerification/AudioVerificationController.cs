@@ -24,7 +24,7 @@ namespace Cognitive_Azure.Features.AudioVerification
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateProfile(AudioProfile model)
+        public async Task<ActionResult> CreateProfile(VerificationProfile model)
         {
             if (ModelState.IsValid)
             {

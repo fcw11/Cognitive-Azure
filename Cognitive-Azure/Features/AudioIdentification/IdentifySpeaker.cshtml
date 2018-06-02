@@ -6,31 +6,41 @@
     <script src="~/js/recorder.js"></script>
 }
 
-<form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
+<div class="container container-outline">
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <form asp-controller="AudioIdentification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
+                
+                <a asp-action="CreateProfile" asp-controller="AudioIdentification" class="btn btn-info button">Create Profile</a>
 
-    @Html.AntiForgeryToken()
+                @Html.AntiForgeryToken()
 
-    <button id="startRecording">Start</button>
+                <button id="startRecording" class="btn btn-info button">Start recording</button>
 
-    <button id="stopRecording">Stop</button>
-</form>
+                <button id="stopRecording" class="btn btn-info hidden button">Stop recording</button>
 
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var profile in Model)
-        {
-            <tr id="@profile.Id">
-                <td>@profile.Name</td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
-</table>
+                <span id="timer"></span>
+            </form>
+        </div>
+    </div>
 
-<div class="col-12" id="status"></div>
+    <div class="row row-padding">
+        <div class="col-md-6">
+            <table id="speakers">
+                <tbody>
+                    @foreach (var profile in Model)
+                    {
+                        <tr id="@profile.Id">
+                            <td>@profile.Name</td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <div id="status"> </div>
+        </div>
+    </div>
+
+</div>

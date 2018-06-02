@@ -1,10 +1,15 @@
 ﻿@model Cognitive_Azure.Features.Images.Upload
 
 <div class="container container-outline">
-    <div class="alert alert-info layout-margin-top" role="alert">
-        <strong>Heads up!</strong> Images are removed daily and are not retained
+
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <div class="alert alert-info layout-margin-top" role="alert">
+                <strong>Heads up!</strong> Images are removed daily and are not retained
+            </div>
+        </div>
     </div>
-    
+
     <div class="row row-padding">
 
         <div class="col-md-12">
@@ -20,7 +25,7 @@
                 <form asp-controller="Images" asp-action="Upload" method="post" enctype="multipart/form-data">
                     <p>
                         @Html.EditorFor(x => x.Image)
-                        <input type="submit" value="Upload" />
+                        <input type="submit" value="Upload"/>
                     </p>
                 </form>
             </div>

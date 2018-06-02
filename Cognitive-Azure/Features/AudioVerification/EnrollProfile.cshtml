@@ -6,26 +6,39 @@
     <script src="~/js/recorder.js"></script>
 }
 
-<form asp-controller="AudioVerification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
+<div class="container container-outline">
 
-    @Html.AntiForgeryToken()
+    <div class="row row-padding ">
+        <h3 class="page-sub-heading">Enroll profile</h3>
+    </div>
 
-    @Html.HiddenFor(x => x.Id)
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <form asp-controller="AudioVerification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
 
-    <button id="startRecording">Start</button>
+                @Html.AntiForgeryToken()
 
-    <button id="stopRecording">Stop</button>
-</form>
+                @Html.HiddenFor(x => x.Id)
 
-<table>
-    <tbody>
-        @foreach (var verificationPhrase in Model.VerificationPhrases)
-        {
-            <tr>
-                <td>@verificationPhrase.Phrase</td>
-            </tr>
-        }
-    </tbody>
-</table>
+                <button id="startRecording" class="btn btn-info">Start recording</button>
 
-<div class="col-12" id="status"></div>
+                <button id="stopRecording" class="btn btn-info hidden">Stop recording</button>
+            </form>
+        </div>
+    </div>
+    <div class="row row-padding">
+        <div class="col-md-6">
+            <table id="phrases">
+                <tbody>
+                    @foreach (var verificationPhrase in Model.VerificationPhrases)
+                {
+                    <tr>
+                        <td>@verificationPhrase.Phrase</td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6 verificationStatus" id="status"></div>
+    </div>
+</div>

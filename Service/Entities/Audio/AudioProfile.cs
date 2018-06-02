@@ -26,7 +26,7 @@ namespace Services.Entities.Audio
         [Required, MinLength(4), Display(Name = "Profile name")]
         public string Name { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Locale")]
         public string SelectedLocale { set; get; }
 
         public Guid SelectedProfile { get; set; }

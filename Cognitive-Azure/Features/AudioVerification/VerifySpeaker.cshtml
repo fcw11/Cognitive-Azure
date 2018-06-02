@@ -5,32 +5,41 @@
     <script src="~/js/VerifySpeaker.js"></script>
     <script src="~/js/recorder.js"></script>
 }
+<div class="container container-outline">
+    <div class="row row-padding">
+        <div class="col-md-6">
+            <form asp-controller="AudioVerification" asp-action="VerifySpeaker" method="post" enctype="multipart/form-data">
 
-<form asp-controller="AudioVerification" asp-action="VerifySpeaker" method="post" enctype="multipart/form-data">
+                <a asp-action="CreateProfile" asp-controller="AudioVerification" class="btn btn-info button">Create Profile</a>
+            
+                @Html.AntiForgeryToken()
 
-    @Html.AntiForgeryToken()
+                <button id="startRecording" class="btn btn-info">Start recording</button>
 
-    <button id="startRecording">Start</button>
+                <button id="stopRecording" class="btn btn-info hidden">Stop recording</button>
 
-    <button id="stopRecording">Stop</button>
-</form>
+                <span id="timer"></span>
+            </form>
+        </div>
+    </div>
 
-<table>
-    <thead>
-    <tr>
-        <th></th>
-        <th>Name</th>
-    </tr>
-    </thead>
-    <tbody>
-        @foreach (var profile in Model)
-        {
-            <tr id="@profile.Id">
-                <td>@Html.RadioButton("SelectedProfile", profile.Id, false)
-                <td>@profile.Name</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="row row-padding">
+        <div class="col-md-6">
+            <table id="verification">
+                <tbody>
+                    @foreach (var profile in Model)
+                    {
+                        <tr id="@profile.Id">
+                            <td>@Html.RadioButton("SelectedProfile", profile.Id, false)
+                            <td>@profile.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <div id="status"> </div>
+        </div>
+    </div>
 
-<div class="col-12" id="status"></div>
+</div>

@@ -60,7 +60,7 @@ namespace Services.Implementation
             }
         }
 
-        public  async Task EnrollProfile(EnrollProfile model)
+        public async Task EnrollProfile(EnrollProfile model)
         {
             var url = $"{ Configuration["AudioAnalyticsAPI"] }identificationProfiles/{ model.Id }/enroll";
 
@@ -68,16 +68,7 @@ namespace Services.Implementation
 
             using (var stream = model.Audio.OpenReadStream())
             {
-                var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
-
-                var responseBytes = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = JSONHelper.FromJson<IdentificationProfile>(responseBytes);
-                }
-
-                throw new Exception($"Failed request : { responseBytes } ");
+                await CognitiveServicesHttpClient.HttpPost(stream, url, key);
             }
         }
 
@@ -147,7 +138,7 @@ namespace Services.Implementation
             }
         }
 
-        public async Task<string> IdentifySpeaker(IdentifyProfile model)
+        public async Task<IdentificationResponse> IdentifySpeaker(IdentifyProfile model)
         {
             var profiles = await GetProfiles();
 
@@ -165,10 +156,12 @@ namespace Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                   return response.Headers.GetValues("Operation-Location").FirstOrDefault();
-                }
+                    var operationLocation = response.Headers.GetValues("Operation-Location").FirstOrDefault();
 
-                throw new Exception($"Failed request : { responseBytes } ");
+                    return new IdentificationResponse { OperationLocation = operationLocation };
+                }
+                
+                return JSONHelper.FromJson<IdentificationResponse>(responseBytes);
             }
         }
 

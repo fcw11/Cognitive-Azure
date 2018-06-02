@@ -23,7 +23,7 @@ namespace Services.Entities.VerificationProfile
         [Required, MinLength(4), Display(Name = "Profile name")]
         public string Name { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Locale")]
         public string SelectedLocale { set; get; }
 
         public EnrollmentStatus EnrollmentStatus { get; set; }

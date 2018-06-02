@@ -25,7 +25,7 @@ namespace Services.Implementation
             CloudTableService = cloudTableService;
         }
 
-        public async Task<Guid> CreateProfile(AudioProfile profile)
+        public async Task<Guid> CreateProfile(Entities.VerificationProfile.VerificationProfile profile)
         {
             var url = Configuration["AudioAnalyticsAPI"] + "verificationProfiles";
 

@@ -12,7 +12,7 @@ namespace Services.Interfaces
         Task<EnrollmentStatus> CheckEnrollmentStatus(Guid id);
         Task<IQueryable<AudioProfile>> GetProfiles();
         Task DeleteProfiles();
-        Task<string> IdentifySpeaker(IdentifyProfile model);
+        Task<IdentificationResponse> IdentifySpeaker(IdentifyProfile model);
         Task<IdentificationStatus> PollIdentifySpeaker(string url);
     }
 }
