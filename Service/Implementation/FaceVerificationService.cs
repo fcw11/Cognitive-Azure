@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Services.Entities.FaceVerification;
 using Services.Entities.JSON;
+using Services.Entities.VerificationProfile;
 using Services.Interfaces;
 
 namespace Services.Implementation
@@ -199,6 +200,18 @@ namespace Services.Implementation
         public async Task<VerifyFaceResponse> VerifyFace(VerifyFace model)
         {
             var face = await DetectFace(model.Image);
+
+            if (face.Length == 0  || face.Length > 1)
+            {
+                return new VerifyFaceResponse
+                {
+                    Error = new Error
+                    {
+                        Code = "Validation error",
+                        Message = face.Length == 0 ? "No face found" : "More than one face found"
+                    }
+                };
+            }
 
             var groupId = Configuration["PersonGroupId"];
 

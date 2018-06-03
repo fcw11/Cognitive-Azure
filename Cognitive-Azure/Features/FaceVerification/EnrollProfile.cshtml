@@ -4,7 +4,7 @@
 <div class="container container-outline">
 
     <div class="row row-padding ">
-        <h3 class="page-sub-heading">Enroll profile</h3>
+        <h3 class="page-sub-heading">Enroll @Model.Name's Profile</h3>
     </div>
 
     <div class="row row-padding">
@@ -14,20 +14,24 @@
                 @Html.AntiForgeryToken()
 
                 @Html.HiddenFor(x => x.PersonId)
+               
+                <div class="col-md-12 input-spacing">
+                    @Html.EditorFor(x => x.Image)
+                    <input type="submit" value="Upload" class="btn btn-info" />
+                    @Html.ValidationMessageFor(x => x.Image, string.Empty, new { @class = "input invalid-feedback" })
+                </div>
+
+                <div class="col-md-12 input-spacing">
+                    @Html.LabelFor(x => x.FaceCount)
+                    @Html.DisplayFor(x => x.FaceCount)
+                </div>
                 
-                @Html.LabelFor(x => x.Name)
-                @Html.DisplayFor(x => x.Name)
-                
-                @Html.LabelFor(x => x.FaceCount)
-                @Html.DisplayFor(x => x.FaceCount)
-                
-                @Html.LabelFor(x => x.Image)
-                @Html.EditorFor(x => x.Image)
-                
-                <input type="submit" value="Upload" class="btn btn-info"/>
+                <div class="col-md-12 input-spacing">
+                    <a asp-action="TrainProfiles" asp-controller="FaceVerification" class="btn btn-info">Train Profile</a>
+                </div>
             </form>
         </div>
     </div>
     
-    <a asp-action="TrainProfiles" asp-controller="FaceVerification" class="btn btn-info">Train</a>
+
 </div>

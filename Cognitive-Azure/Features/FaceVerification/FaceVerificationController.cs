@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Entities.FaceVerification;
@@ -30,8 +31,10 @@ namespace Cognitive_Azure.Features.FaceVerification
                  var response = await FaceVerificationService.VerifyFace(model);
                 return new JsonResult(response);
             }
+            
+            var modelStateErrors = ModelState.Values.Select(x => x.Errors);
 
-            return new JsonResult("");
+            return new JsonResult(modelStateErrors);
         }
         
         [HttpGet]

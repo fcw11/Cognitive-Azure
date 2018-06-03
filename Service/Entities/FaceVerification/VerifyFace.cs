@@ -8,10 +8,10 @@ namespace Services.Entities.FaceVerification
 {
     public class VerifyFace : IValidatableObject
     {
-        public Guid Id { get; set; }
+        [Required(ErrorMessage = "Please select a person"), Display(Name = "Person")]
+        public Guid? Id { get; set; }
 
-        [Required]
-        [Display(Name = "Please select a file")]
+        [Required(ErrorMessage = "Please attach a file"), Display(Name = "Image")]
         [DataType(DataType.Upload)]
         public IFormFile Image { get; set; }
 
@@ -27,7 +27,7 @@ namespace Services.Entities.FaceVerification
 
             var fileTypes = new[] { "image/png", "image/jpeg", "image/gif", "image/bmp" };
 
-            if (!fileTypes.Contains(Image.ContentType))
+            if (Image.Length > 0 && !fileTypes.Contains(Image.ContentType))
             {
                 yield return new ValidationResult("Unsupported image format", new[] { "Image" });
             }

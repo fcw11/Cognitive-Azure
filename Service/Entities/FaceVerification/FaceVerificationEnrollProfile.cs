@@ -10,7 +10,7 @@ namespace Services.Entities.FaceVerification
     {
         public Guid PersonId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Required")]
         [Display(Name = "Please select a file")]
         [DataType(DataType.Upload)]
         public IFormFile Image { get; set; }
@@ -21,7 +21,7 @@ namespace Services.Entities.FaceVerification
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Display(Name = "Face count")]
+        [Display(Name = "Current image count")]
         public int FaceCount { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

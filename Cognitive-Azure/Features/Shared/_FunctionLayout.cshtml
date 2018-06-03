@@ -11,6 +11,7 @@
 
     var verifyActive = controller.ToLower() == "audioverification" && new[] { "createprofile", "enrollprofile", "verifyspeaker" }.Contains(action.ToLower()) ? "active" : string.Empty;
 
+    var faceActive = controller.ToLower() == "faceverification" && new[] { "createprofile", "enrollprofile", "verifyface" }.Contains(action.ToLower()) ? "active" : string.Empty;
 }
 
 <ul class="nav nav-tabs layout-margin-top">
@@ -18,7 +19,7 @@
         <a asp-controller="Images" asp-action="Index" class="nav-link @visonActive">Vision</a>
     </li>
     <li class="nav-item">
-        <a asp-controller="FaceVerification" asp-action="VerifyFace" class="nav-link @visonActive">Face Verification</a>
+        <a asp-controller="FaceVerification" asp-action="VerifyFace" class="nav-link @faceActive">Face Verification</a>
     </li>
     <li class="nav-item">
         <a asp-controller="AudioIdentification" asp-action="IdentifySpeaker" class="nav-link @identifyActive">Audio Identification</a>
