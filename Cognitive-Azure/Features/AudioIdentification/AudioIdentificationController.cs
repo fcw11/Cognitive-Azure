@@ -111,5 +111,13 @@ namespace Cognitive_Azure.Features.AudioIdentification
 
             return new JsonResult(string.Empty);
         }
+
+        [HttpGet]
+        public async Task<JsonResult> RegisterFakeProfiles()
+        {
+            await AudioIdentificationService.RegisterFakeProfiles();
+
+            return new JsonResult(string.Empty);
+        }
     }
 }

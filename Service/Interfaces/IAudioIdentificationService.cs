@@ -14,5 +14,6 @@ namespace Services.Interfaces
         Task DeleteProfiles();
         Task<IdentificationResponse> IdentifySpeaker(IdentifyProfile model);
         Task<IdentificationStatus> PollIdentifySpeaker(string url);
+        Task RegisterFakeProfiles();
     }
 }

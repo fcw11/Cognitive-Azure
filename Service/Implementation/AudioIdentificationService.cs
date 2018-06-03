@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -182,5 +184,60 @@ namespace Services.Implementation
 
             throw new Exception($"Failed request : { responseBytes } ");
         }
+
+        #region Fakes
+
+        public async Task RegisterFakeProfiles()
+        {
+            await RegisterLiamNeelson();
+
+            await RegisterRoryMcIlroy();
+        }
+
+        private async Task RegisterLiamNeelson()
+        {
+            var profile = new AudioProfile
+            {
+                Name = "Liam Neelson",
+                SelectedLocale = "en-us"
+            };
+
+            profile.Id = await CreateProfile(profile);
+
+            var url = $"{Configuration["AudioAnalyticsAPI"]}identificationProfiles/{profile.Id}/enroll";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var req = WebRequest.Create("https://cognitiveservice.blob.core.windows.net/fakes/liam%20neelson%20taken.wav");
+
+            using (var stream = req.GetResponse().GetResponseStream())
+            {
+                await CognitiveServicesHttpClient.HttpPostAudio(stream, url, key);
+            }
+        }
+
+        private async Task RegisterRoryMcIlroy()
+        {
+            var profile = new AudioProfile
+            {
+                Name = "Rory McIlroy",
+                SelectedLocale = "en-us"
+            };
+
+            profile.Id = await CreateProfile(profile);
+
+            var url = $"{Configuration["AudioAnalyticsAPI"]}identificationProfiles/{profile.Id}/enroll";
+
+            var key = Configuration["AudioAnalyticsKey"];
+
+            var req = WebRequest.Create("https://cognitiveservice.blob.core.windows.net/fakes/Rory%20McIlroy.wav");
+
+            using (var stream = req.GetResponse().GetResponseStream())
+            {
+                await CognitiveServicesHttpClient.HttpPostAudio(stream, url, key);
+            }
+        }
     }
+
+    #endregion
 }
