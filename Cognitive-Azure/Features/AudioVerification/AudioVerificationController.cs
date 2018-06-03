@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Services.Entities.Audio;
 using Services.Entities.VerificationProfile;
 using Services.Interfaces;
 
@@ -78,7 +77,7 @@ namespace Cognitive_Azure.Features.AudioVerification
         }
 
         [HttpGet]
-        public async Task<JsonResult> DeleteSpeakers()
+        public async Task<JsonResult> DeleteProfiles()
         {
             await AudioVerificationService.DeleteProfiles();
 

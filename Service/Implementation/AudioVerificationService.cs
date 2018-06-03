@@ -70,7 +70,7 @@ namespace Services.Implementation
 
             using (var inputStream = model.Audio.OpenReadStream())
             {
-                var response = await CognitiveServicesHttpClient.HttpPost(inputStream, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPostAudio(inputStream, url, key);
 
                 var responseBytes = await response.Content.ReadAsStringAsync();
 
@@ -190,7 +190,7 @@ namespace Services.Implementation
 
             using (var stream = model.Audio.OpenReadStream())
             {
-                var response = await CognitiveServicesHttpClient.HttpPost(stream, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPostAudio(stream, url, key);
 
                 var responseBytes = await response.Content.ReadAsStringAsync();
 
@@ -220,7 +220,7 @@ namespace Services.Implementation
 
             using (var inputStream = model.Audio.OpenReadStream())
             {
-                var response = await CognitiveServicesHttpClient.HttpPost(inputStream, url, key);
+                var response = await CognitiveServicesHttpClient.HttpPostAudio(inputStream, url, key);
 
                 var responseBytes = await response.Content.ReadAsStringAsync();
 

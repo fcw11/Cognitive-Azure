@@ -1,0 +1,67 @@
+﻿@model IQueryable<Services.Entities.FaceVerification.FaceVerificationProfile>
+
+@section Scripts {
+    <script src="~/js/VerifyFace.js"></script>
+}
+
+<div class="container container-outline">
+
+    @if (!Model.Any())
+    {
+        <div class="row row-padding">
+            <div class="col-md-12">
+                <div>
+                    No verification profiles exist, try <a asp-action="CreateProfile" asp-controller="FaceVerification" class="btn btn-info">creating</a> a profile.
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+
+        <div class="row row-padding">
+            <div class="col-md-12">
+                <form asp-action="VerifyFace" asp-controller="FaceVerification" method="post" enctype="multipart/form-data">
+                    
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-12 input-spacing">
+                        <a asp-action="CreateProfile" asp-controller="FaceVerification" class="btn btn-info button">Create Profile</a>
+                    
+                        <input type="submit" value="Verify" class="btn btn-info">
+                        <input data-val="true" data-val-required="The Please select a file field is required." id="Image" name="Image" type="file">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row row-padding">
+            <div class="col-md-6">
+                <table id="verification">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Number of images</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var profile in Model)
+                        {
+                            <tr>
+                                <td>@Html.RadioButton("SelectedProfile", profile.PersonId, false)
+                                <td>@profile.Name</td>
+                                <td>@profile.PersistedFaceIds.Count</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div id="status"> </div>
+            </div>
+        </div>
+    }
+</div>

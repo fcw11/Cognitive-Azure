@@ -1,0 +1,28 @@
+﻿@using Services.Entities.FaceVerification
+@model FaceVerificationEnrollProfile
+
+@section Scripts {
+    <script src="~/js/TrainFaceProfiles.js"></script>
+}
+
+<div class="container container-outline">
+
+    <div class="row row-padding ">
+        <div class="col-md-12">
+            <h3 class="page-sub-heading">Training profile</h3>
+        </div>
+        
+    </div>
+
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <div id="status"> </div>
+        </div>
+    </div>
+    
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <a asp-action="VerifyFace" asp-controller="FaceVerification" class="btn btn-info button">Back to list</a>
+        </div>
+    </div>
+</div>

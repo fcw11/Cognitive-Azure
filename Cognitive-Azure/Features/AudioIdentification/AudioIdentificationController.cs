@@ -105,7 +105,7 @@ namespace Cognitive_Azure.Features.AudioIdentification
         }
 
         [HttpGet]
-        public async Task<JsonResult> DeleteSpeakers()
+        public async Task<JsonResult> DeleteProfiles()
         {
             await AudioIdentificationService.DeleteProfiles();
 

@@ -1,11 +1,6 @@
 ﻿@using Services.Entities.VerificationProfile
 @model EnrollVerificationProfile
 
-@section Scripts {
-    <script src="~/js/EnrollVerificationAudio.js"></script>
-    <script src="~/js/recorder.js"></script>
-}
-
 <div class="container container-outline">
 
     <div class="row row-padding ">
@@ -18,7 +13,7 @@
 
                 @Html.AntiForgeryToken()
 
-                @Html.HiddenFor(x => x.Id)
+                @Html.EditorForModel(x => x.)
 
                 <button id="startRecording" class="btn btn-info">Start recording</button>
 

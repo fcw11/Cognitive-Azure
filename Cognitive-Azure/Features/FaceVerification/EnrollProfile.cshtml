@@ -1,0 +1,33 @@
+﻿@using Services.Entities.FaceVerification
+@model FaceVerificationEnrollProfile
+
+<div class="container container-outline">
+
+    <div class="row row-padding ">
+        <h3 class="page-sub-heading">Enroll profile</h3>
+    </div>
+
+    <div class="row row-padding">
+        <div class="col-md-12">
+            <form asp-controller="FaceVerification" asp-action="EnrollProfile" method="post" enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(x => x.PersonId)
+                
+                @Html.LabelFor(x => x.Name)
+                @Html.DisplayFor(x => x.Name)
+                
+                @Html.LabelFor(x => x.FaceCount)
+                @Html.DisplayFor(x => x.FaceCount)
+                
+                @Html.LabelFor(x => x.Image)
+                @Html.EditorFor(x => x.Image)
+                
+                <input type="submit" value="Upload" class="btn btn-info"/>
+            </form>
+        </div>
+    </div>
+    
+    <a asp-action="TrainProfiles" asp-controller="FaceVerification" class="btn btn-info">Train</a>
+</div>

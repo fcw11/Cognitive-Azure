@@ -31,6 +31,7 @@ namespace Cognitive_Azure
             services.AddSingleton<IAudioIdentificationService, AudioIdentificationService>();
             services.AddSingleton<IAudioVerificationService, AudioVerificationService>();
             services.AddSingleton<IImageService, ImageService>();
+            services.AddSingleton<IFaceVerificationService, FaceVerificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
