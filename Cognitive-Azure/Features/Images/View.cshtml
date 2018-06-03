@@ -101,10 +101,10 @@
                 </li>
             </ul>
             <div class="tab-content tab-border" id="myTabContent">
-                <div class="tab-pane fade active show" id="comments"  role="tabpanel" aria-labelledby="comments-tab" aria-expanded="true">
+                <div class="tab-pane fade" id="comments"  role="tabpanel" aria-labelledby="comments-tab" aria-expanded="false">
                     @Html.Partial("_AddComment", Model.Comments)
                 </div>
-                <div class="tab-pane fade" id="analyze" role="tabpanel" aria-labelledby="analyze-tab" aria-expanded="true">
+                <div class="tab-pane fade active show" id="analyze" role="tabpanel" aria-labelledby="analyze-tab" aria-expanded="true">
                     <pre>@Model.Analyse?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="faces" role="tabpanel" aria-labelledby="faces-tab" aria-expanded="false">

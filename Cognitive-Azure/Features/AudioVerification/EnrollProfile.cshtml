@@ -1,6 +1,11 @@
 ﻿@using Services.Entities.VerificationProfile
 @model EnrollVerificationProfile
 
+@section Scripts {
+    <script src="~/js/EnrollVerificationAudio.js"></script>
+    <script src="~/js/recorder.js"></script>
+}
+
 <div class="container container-outline">
 
     <div class="row row-padding ">
@@ -13,11 +18,13 @@
 
                 @Html.AntiForgeryToken()
 
-                @Html.EditorForModel(x => x.)
+                @Html.HiddenFor(x => x.Id)
 
                 <button id="startRecording" class="btn btn-info">Start recording</button>
 
                 <button id="stopRecording" class="btn btn-info hidden">Stop recording</button>
+                
+                <a asp-action="VerifySpeaker" asp-controller="AudioVerification" class="btn btn-info button">Back to list</a>
             </form>
         </div>
     </div>
@@ -35,7 +42,7 @@
             </table>
         </div>
         <div class="col-md-6 verificationStatus" id="status">
-            Choose any phrases on the left, and record the <b>same</b> three seperate times to enroll your profile.
+            Choose any phrases on the left, and record the <b>same</b> phrase at least <b>three</b> seperate times to enroll your profile.
         </div>
     </div>
 </div>

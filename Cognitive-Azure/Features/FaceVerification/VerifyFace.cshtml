@@ -44,15 +44,17 @@
                             <th></th>
                             <th>Name</th>
                             <th>Number of images</th>
+                            <th>Confidence</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var profile in Model)
                         {
-                            <tr>
+                            <tr id="@profile.PersonId">
                                 <td>@Html.RadioButton("SelectedProfile", profile.PersonId, false)
                                 <td>@profile.Name</td>
                                 <td>@profile.PersistedFaceIds.Count</td>
+                                <td></td>
                             </tr>
                         }
                     </tbody>

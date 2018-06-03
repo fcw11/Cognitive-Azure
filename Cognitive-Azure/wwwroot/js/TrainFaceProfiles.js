@@ -1,10 +1,6 @@
 ﻿var intervalId;
 
 $(function () {
-
-    intervalId = setInterval(getTrainingStatus, 3000);
-
-
     function getTrainingStatus() {
         var url = "/FaceVerification/getTrainingStatus";
 
@@ -49,4 +45,8 @@ $(function () {
             return '<span class="' + cls + '">' + match + '</span>';
         });
     }
+
+    getTrainingStatus();
+
+    intervalId = setInterval(getTrainingStatus, 3000);
 });

@@ -8,7 +8,7 @@ namespace Services.Entities.VerificationProfile
         public Guid Id { get; set; }
 
         public IFormFile Audio { get; set; }
-        public EnrollmentPhrases[] VerificationPhrases { get; set; }
 
+        public EnrollmentPhrases[] VerificationPhrases { get; set; }
     }
 }

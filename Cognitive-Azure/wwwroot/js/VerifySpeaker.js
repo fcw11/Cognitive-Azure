@@ -76,6 +76,21 @@ $(function () {
         prettifiedResponse = prettifiedResponse.replace(/{/g, "{<br />").replace(/}/g, "<br />}").replace(/,/g, ",<br />");
 
         $("#status").html(prettifiedResponse);
+
+        $("tr").removeClass('notverified');
+        $("tr").removeClass('verified');
+        $("tr td:last-child").html('');
+        debugger;
+        if (data.result == "Accept") {
+            var id = $("#SelectedProfile:checked").val();
+            $("tr[id='" + id + "']").addClass('verified');
+            $("tr[id='" + id + "'] td:last").html(data.confidence);
+        }
+        if (data.result == "Reject") {
+            var id = $("#SelectedProfile:checked").val();
+            $("tr[id='" + id + "']").addClass('notverified');
+            $("tr[id='" + id + "'] td:last").html(data.confidence);
+        }
     }
 
     function syntaxHighlight(json) {

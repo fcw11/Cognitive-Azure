@@ -152,6 +152,11 @@
      font-weight: bold;
  }
 
+ .notverified td {
+     background-color: red;
+     font-weight: bold;
+ }
+
 #speakers {
     width: 100%;
 }

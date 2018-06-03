@@ -39,12 +39,20 @@
         <div class="row row-padding">
             <div class="col-md-6">
                 <table id="verification">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Confidence</th>
+                    </tr>
+                    </thead>
                     <tbody>
                     @foreach (var profile in Model)
                     {
                         <tr id="@profile.Id">
                             <td>@Html.RadioButton("SelectedProfile", profile.Id, false)
                             <td>@profile.Name</td>
+                            <td></td>
                         </tr>
                     }
                     </tbody>
