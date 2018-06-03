@@ -1,5 +1,7 @@
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -69,6 +71,18 @@ namespace Functions.Functions
             foreach (CloudBlockBlob entity in faceBlobEntities)
             {
                 await entity.DeleteAsync();
+            }
+
+            using (var client = new HttpClient())
+            {
+                var faceVerificationDelete = ConfigurationManager.AppSettings["FaceVerificationDelete"];
+                await client.GetAsync(faceVerificationDelete);
+
+                var audioIdentificationDelete = ConfigurationManager.AppSettings["AudioIdentificationDelete"];
+                await client.GetAsync(audioIdentificationDelete);
+
+                var audioVerificatonDelete = ConfigurationManager.AppSettings["AudioVerificatonDelete"];
+                await client.GetAsync(audioVerificatonDelete);
             }
         }
     }
