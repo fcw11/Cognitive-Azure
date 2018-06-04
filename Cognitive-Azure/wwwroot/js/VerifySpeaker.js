@@ -80,7 +80,7 @@ $(function () {
         $("tr").removeClass('notverified');
         $("tr").removeClass('verified');
         $("tr td:last-child").html('');
-        debugger;
+
         if (data.result == "Accept") {
             var id = $("#SelectedProfile:checked").val();
             $("tr[id='" + id + "']").addClass('verified');
