@@ -208,3 +208,10 @@
 .verificationStatus {
     height: auto !important;
 }
+
+.github-icon {
+    text-align: center;
+    background-color: #343a40;
+    color: #fff;
+    fill: currentcolor;
+}
