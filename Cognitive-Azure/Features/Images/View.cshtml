@@ -102,32 +102,32 @@
             </ul>
             <div class="tab-content tab-border" id="myTabContent">
                 <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab" aria-expanded="false">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment</pre>
-                    <pre>https://northeurope.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment</code>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases</code>
                     @Html.Partial("_AddComment", Model.Comments)
                 </div>
                 <div class="tab-pane fade active show" id="analyze" role="tabpanel" aria-labelledby="analyze-tab" aria-expanded="true">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color,Adult&details=Celebrities,Landmarks</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color,Adult&details=Celebrities,Landmarks</code>
                     <pre>@Model.Analyse?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="faces" role="tabpanel" aria-labelledby="faces-tab" aria-expanded="false">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/vision/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true&returnFaceAttributes=age,gender,smile,facialHair,headPose,glasses,emotion,hair,makeup,accessories,blur,exposure,noise</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/vision/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true&returnFaceAttributes=age,gender,smile,facialHair,headPose,glasses,emotion,hair,makeup,accessories,blur,exposure,noise</code>
                     <pre>@Model.Faces?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="describe" role="tabpanel" aria-labelledby="describe-tab" aria-expanded="false">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/vision/v1.0/describe</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/vision/v1.0/describe</code>
                     <pre>@Model.Description?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="ocr" role="tabpanel" aria-labelledby="ocr-tab" aria-expanded="false">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/vision/v1.0/ocr?detectOrientation=true</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/vision/v1.0/ocr?detectOrientation=true</code>
                     <pre>@Model.OCR?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="handwriting" role="tabpanel" aria-labelledby="handwriting-tab" aria-expanded="false">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/vision/v1.0/recognizeText?handwriting=true</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/vision/v1.0/recognizeText?handwriting=true</code>
                     <pre>@Model.Handwriting?.PrettyPrintJson()</pre>
                 </div>
                 <div class="tab-pane fade" id="tag" role="tabpanel" aria-labelledby="tag-tab" aria-expanded="false">
-                    <pre>https://northeurope.api.cognitive.microsoft.com/vision/v1.0/tag</pre>
+                    <code class="code">https://northeurope.api.cognitive.microsoft.com/vision/v1.0/tag</code>
                     <pre>@Model.Tag?.PrettyPrintJson()</pre>
                 </div>
             </div>
