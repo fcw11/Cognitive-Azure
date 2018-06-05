@@ -47,7 +47,7 @@ namespace Cognitive_Azure
                    .AddCustomHeader("Content-Security-Policy", "default-src 'none\';" +
                                                                "script-src \'self\' https://cognitive.pbreen.co.uk https://maxcdn.bootstrapcdn.com https://code.jquery.com/;" +
                                                                "style-src \'self\' \'unsafe-inline\' https://maxcdn.bootstrapcdn.com;" +
-                                                               "worker-src \'self';" +
+                                                               "worker-src \'self' blob:;" +
                                                                "font-src \'self\' https://maxcdn.bootstrapcdn.com;" +
                                                                "img-src \'self\' https://cognitiveservice.blob.core.windows.net;" +
                                                                "connect-src \'self\';" +
